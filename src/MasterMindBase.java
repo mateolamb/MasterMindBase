@@ -155,7 +155,15 @@ public class MasterMindBase {
      */
     public static int[] codeAleat(int lgCode, int nbCouleurs) {
 
+        int[] tab = new int[lgCode];
 
+        for(int i=0; i<lgCode; i++){
+            Random rn = new Random();
+            int r = rn.nextInt(nbCouleurs);
+            tab[i]=r;
+        }
+
+        return tab;
 
     }
 
