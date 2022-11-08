@@ -201,6 +201,16 @@ public class MasterMindBase {
      */
     public static int[] motVersEntiers(String codMot, char[] tabCouleurs) {
 
+        int[] tab = new int[codMot.length()];
+
+        // on cherche l'indice grâce à la 3 eme fonction plusGrandIndice et on la met dans le tableau final
+        for( int i=0; i<codMot.length(); i++) {
+            int place = plusGrandIndice(tabCouleurs, codMot.charAt(i));
+            tab[i]=place;
+        }
+
+        return tab;
+
     }
 
     //____________________________________________________________
@@ -213,6 +223,22 @@ public class MasterMindBase {
      */
     public static int[] propositionCodeHumain(int nbCoups, int lgCode, char[] tabCouleurs) {
 
+        // on demande la saisie
+        System.out.println("Vueillez saisre votre Code couleur");
+        Scanner myObj4 = new Scanner(System.in);
+        String demande = myObj4.nextLine();
+
+        // tant que la saisie n'est pas bonne on redemande
+        while(!codeCorrect(demande, lgCode, tabCouleurs)){
+
+            System.out.println("Vueillez saisre votre Code couleur");
+            myObj4 = new Scanner(System.in);
+            demande = myObj4.nextLine();
+
+        }
+        //on retourne le code sous forme de tableau d'entier (grâce à la fonction motVersEntiers
+        return motVersEntiers(demande, tabCouleurs);
+
     }
 
     //____________________________________________________________
@@ -223,6 +249,17 @@ public class MasterMindBase {
      * Par exemple, si cod1 = (1,0,2,0) et cod2 = (0,1,0,0) la fonction retourne 1 (le "0" à l'indice 3)
      */
     public static int nbBienPlaces(int[] cod1, int[] cod2) {
+
+        int compteur = 0;
+
+        for (int i = 0; i < cod1.length; i++) {
+            if(cod1[i]==cod2[i]){
+                compteur++;
+            }
+
+        }
+
+        return compteur;
 
     }
 
@@ -235,6 +272,13 @@ public class MasterMindBase {
      */
     public static int[] tabFrequence(int[] cod, int nbCouleurs) {
 
+        int[] freq = new int[nbCouleurs];
+
+        // pour chaque valeur de cod, on prends cette valeur qui correspond donc a l'indice du tableau freq et on ajoute 1
+        for (int i = 0; i < cod.length; i++) {
+            freq[cod[i]]++;
+        }
+        return freq;
     }
 
     //____________________________________________________________
