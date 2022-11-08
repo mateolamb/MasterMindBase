@@ -133,8 +133,8 @@ public class MasterMindBase {
      */
     public static boolean sontEgaux(int[] t1, int[] t2) {
 
-        for(int i=0; i<t1.length; i++){
-            if(t1[i]!=t2[i]){
+        for (int i = 0; i < t1.length; i++) {
+            if (t1[i] != t2[i]) {
                 return false;
             }
         }
@@ -157,10 +157,10 @@ public class MasterMindBase {
 
         int[] tab = new int[lgCode];
 
-        for(int i=0; i<lgCode; i++){
+        for (int i = 0; i < lgCode; i++) {
             Random rn = new Random();
             int r = rn.nextInt(nbCouleurs);
-            tab[i]=r;
+            tab[i] = r;
         }
 
         return tab;
@@ -176,17 +176,17 @@ public class MasterMindBase {
      */
     public static boolean codeCorrect(String codMot, int lgCode, char[] tabCouleurs) {
 
-        if(codMot.length()!=lgCode){
+        if (codMot.length() != lgCode) {
             System.out.println("Votre mot n'est pas de la bonne longueur.");
             return false;
-        }else{
-            for( int i=0; i<codMot.length(); i++){
+        } else {
+            for (int i = 0; i < codMot.length(); i++) {
                 //on va chercher la fonction estPresent pour savoir si le mot est correct
-               boolean est_present = estPresent(tabCouleurs,  codMot.charAt(i));
-               if(est_present==false){
-                   System.out.println("La lettre  "+i+" de votre mot n'est pas bonne.");
-                   return false;
-               }
+                boolean est_present = estPresent(tabCouleurs, codMot.charAt(i));
+                if (est_present == false) {
+                    System.out.println("La lettre  " + i + " de votre mot n'est pas bonne.");
+                    return false;
+                }
             }
         }
         return true;
@@ -204,9 +204,9 @@ public class MasterMindBase {
         int[] tab = new int[codMot.length()];
 
         // on cherche l'indice grâce à la 3 eme fonction plusGrandIndice et on la met dans le tableau final
-        for( int i=0; i<codMot.length(); i++) {
+        for (int i = 0; i < codMot.length(); i++) {
             int place = plusGrandIndice(tabCouleurs, codMot.charAt(i));
-            tab[i]=place;
+            tab[i] = place;
         }
 
         return tab;
@@ -229,7 +229,7 @@ public class MasterMindBase {
         String demande = myObj4.nextLine();
 
         // tant que la saisie n'est pas bonne on redemande
-        while(!codeCorrect(demande, lgCode, tabCouleurs)){
+        while (!codeCorrect(demande, lgCode, tabCouleurs)) {
 
             System.out.println("Vueillez saisre votre Code couleur");
             myObj4 = new Scanner(System.in);
@@ -253,7 +253,7 @@ public class MasterMindBase {
         int compteur = 0;
 
         for (int i = 0; i < cod1.length; i++) {
-            if(cod1[i]==cod2[i]){
+            if (cod1[i] == cod2[i]) {
                 compteur++;
             }
 
@@ -289,7 +289,17 @@ public class MasterMindBase {
      * Par exemple, si cod1 = (1,0,2,0) et cod2 = (0,1,0,0) la fonction retourne 3 (2 "0" et 1 "1")
      */
     public static int nbCommuns(int[] cod1, int[] cod2, int nbCouleurs) {
-
+        int[] freqCod1 = tabFrequence(cod1, nbCouleurs);
+        int[] freqCod2 = tabFrequence(cod2, nbCouleurs);
+        int nbCommuns = 0;
+        for (int i = 0; i < cod1.length; i++) {
+            if (freqCod1[i] < freqCod2[i]) {
+                nbCommuns += freqCod1[i];
+            } else {
+                nbCommuns += freqCod2[i];
+            }
+        }
+        return nbCommuns;
     }
 
     //____________________________________________________________
@@ -302,7 +312,10 @@ public class MasterMindBase {
      * et 2 mal placés (1 "0" et 1 "1")
      */
     public static int[] nbBienMalPlaces(int[] cod1, int[] cod2, int nbCouleurs) {
-
+        int nbBienPlaces = nbBienPlaces(cod1, cod2);
+        int nbCommuns = nbCommuns(cod1, cod2, nbCouleurs);
+        int[] nbBienMalPlaces = {nbBienPlaces, nbCommuns};
+        return nbBienMalPlaces;
     }
 
     //____________________________________________________________
@@ -320,7 +333,7 @@ public class MasterMindBase {
      * s'il n'a toujours pas trouvé au bout du nombre maximum d'essais
      * - sinon le nombre de codes proposés par le joueur humain
      */
-    public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax))
+    public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax){
 
     {
 
@@ -337,7 +350,11 @@ public class MasterMindBase {
      * résultat : le code cod sous forme de mot d'après le tableau tabCouleurs
      */
     public static String entiersVersMot(int[] cod, char[] tabCouleurs) {
-
+        String codMot = "";
+        for (int i = 0; i < cod.length; i++) {
+            codMot += tabCouleurs[cod[i]];
+        }
+        return codMot;
     }
 
     //___________________________________________________________________
@@ -349,7 +366,20 @@ public class MasterMindBase {
      * résultat : vrai ssi rep est correct, c'est-à-dire rep[0] et rep[1] sont >= 0 et leur somme est <= lgCode
      */
     public static boolean repCorrecte(int[] rep, int lgCode) {
-
+        if (rep.length != 2) return false;
+        else if (rep[0]<0 ) {
+            System.out.println("Vous ne pouvez pas donnez un nombre négatif de couleurs bien placées : ");
+            return false;
+        }
+        else if (rep[1]<0 ) {
+            System.out.println("Vous ne pouvez pas donnez un nombre négatif de bonnes couleurs mais mal placées : ");
+            return false;
+        }
+        else if (rep[0]+rep[1]>lgCode ) {
+            System.out.println("Vos deux nombres ne doivent pas dépasser la longeur du code : ");
+            return false;
+        }
+        else return true;
     }
 
     //___________________________________________________________________
@@ -361,7 +391,21 @@ public class MasterMindBase {
      * résultat : les réponses du joueur humain dans un tableau à 2 entiers
      */
     public static int[] reponseHumain(int lgCode) {
-
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Donnez le nombres de couleurs bien placées : ");
+        int nbBienplaces= scn.nextInt();
+        System.out.println("Donnez le nombres de bonnes couleurs mais mal placées : ");
+        int nbMalplaces= scn.nextInt();
+        int[] rep={nbBienplaces,nbMalplaces};
+        while(!repCorrecte(rep,lgCode)) {
+            System.out.println("Donnez le nombres de couleurs bien placées : ");
+            nbBienplaces= scn.nextInt();
+            System.out.println("Donnez le nombres de bonnes couleurs mais mal placées : ");
+            nbMalplaces= scn.nextInt();
+            rep[0]=nbBienplaces;
+            rep[1]=nbMalplaces;
+        }
+        return rep;
     }
 
     //___________________________________________________________________
@@ -442,7 +486,7 @@ public class MasterMindBase {
         int demande = scan.nextInt();
 
         // tant que la saisie n'est pas bonne on redemande
-        while(demande<1){
+        while (demande < 1) {
             System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif");
             scan = new Scanner(System.in);
             demande = scan.nextInt();
@@ -466,7 +510,7 @@ public class MasterMindBase {
         int demande = scan.nextInt();
 
         // tant que la saisie n'est pas bonne on redemande
-        while(demande<1 || demande%2==1){
+        while (demande < 1 || demande % 2 == 1) {
             System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif pair");
             scan = new Scanner(System.in);
             demande = scan.nextInt();
@@ -475,7 +519,7 @@ public class MasterMindBase {
         return demande;
     }
 
-    }
+}
 
     //___________________________________________________________________
 
@@ -507,7 +551,6 @@ public class MasterMindBase {
      * Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
     public static void main(String[] args) {
-
 
     } // fin main
 
