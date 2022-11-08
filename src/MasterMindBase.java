@@ -176,6 +176,21 @@ public class MasterMindBase {
      */
     public static boolean codeCorrect(String codMot, int lgCode, char[] tabCouleurs) {
 
+        if(codMot.length()!=lgCode){
+            System.out.println("Votre mot n'est pas de la bonne longueur.");
+            return false;
+        }else{
+            for( int i=0; i<codMot.length(); i++){
+                //on va chercher la fonction estPresent pour savoir si le mot est correct
+               boolean est_present = estPresent(tabCouleurs,  codMot.charAt(i));
+               if(est_present==false){
+                   System.out.println("La lettre  "+i+" de votre mot n'est pas bonne.");
+                   return false;
+               }
+            }
+        }
+        return true;
+
     }
 
     //____________________________________________________________
