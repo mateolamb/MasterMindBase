@@ -49,12 +49,12 @@ public class MasterMindBase {
 
         String str ="";
 
-        str+= "(" + t[0] + ")";
+        str+= "(" + t[0];
 
         for(int i=1; i<t.length; i++){
-            str+= ",(" + t[i] + ")";
+            str+= "," + t[i] ;
         }
-
+        str+=")";
         return str;
     }
 
