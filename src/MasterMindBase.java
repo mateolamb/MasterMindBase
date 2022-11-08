@@ -437,7 +437,18 @@ public class MasterMindBase {
      */
     public static int saisirEntierPositif() {
 
+        System.out.println("Vueillez saisre un entier positif");
+        Scanner scan = new Scanner(System.in);
+        int demande = scan.nextInt();
 
+        // tant que la saisie n'est pas bonne on redemande
+        while(demande<1){
+            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif");
+            scan = new Scanner(System.in);
+            demande = scan.nextInt();
+
+        }
+        return demande;
     }
 
     //___________________________________________________________________
@@ -449,6 +460,20 @@ public class MasterMindBase {
      * résultat : l'entier pair strictement positif saisi
      */
     public static int saisirEntierPairPositif() {
+
+        System.out.println("Vueillez saisre un entier positif pair");
+        Scanner scan = new Scanner(System.in);
+        int demande = scan.nextInt();
+
+        // tant que la saisie n'est pas bonne on redemande
+        while(demande<1 || demande%2==1){
+            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif pair");
+            scan = new Scanner(System.in);
+            demande = scan.nextInt();
+
+        }
+        return demande;
+    }
 
     }
 
