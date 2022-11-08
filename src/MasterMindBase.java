@@ -3,6 +3,7 @@ import java.lang.*;
 
 public class MasterMindBase {
 
+
     //.........................................................................
     // OUTILS DE BASE
     //.........................................................................
@@ -14,6 +15,13 @@ public class MasterMindBase {
      */
     public static int[] initTab(int nb, int val){
 
+        int[] tab = new int[nb];
+        for(int i=0; i<nb; i++){
+            tab[i]=val;
+        }
+
+        return tab;
+
     }
 
     //______________________________________________
@@ -22,6 +30,13 @@ public class MasterMindBase {
      résultat : une copie de tab
      */
     public static int[] copieTab(int[] tab){
+
+        int[] tab2 = new int[tab.length];
+        for(int i=0; i<tab.length; i++){
+            tab2[i]=tab[i];
+        }
+
+        return tab2;
 
     }
 
@@ -32,6 +47,15 @@ public class MasterMindBase {
      */
     public static String listElem(char[] t){
 
+        String str ="";
+
+        str+= "(" + t[0] + ")";
+
+        for(int i=1; i<t.length; i++){
+            str+= ",(" + t[i] + ")";
+        }
+
+        return str;
     }
 
     //______________________________________________
@@ -41,6 +65,23 @@ public class MasterMindBase {
      */
     public static int plusGrandIndice(char[] t, char c){
 
+        boolean contient = false;
+        int ind=0;
+
+        for(int i=0; i<t.length; i++){
+            if(t[i]==c){
+                contient=true;
+                ind = i;
+            }
+        }
+
+        if(contient==false){
+            return -1;
+        }else{
+            return ind;
+        }
+
+
     }
     //______________________________________________
 
@@ -49,6 +90,14 @@ public class MasterMindBase {
      stratégie : utilise la fonction plusGrandIndice
      */
     public static boolean estPresent(char[] t, char c){
+
+        int result = plusGrandIndice(t, c);
+
+        if(result==-1){
+            return false;
+        }else{
+            return true;
+        }
 
     }
 
@@ -323,9 +372,9 @@ public class MasterMindBase {
     public static void main (String[] args){
 
 
+
     } // fin main
 
     //___________________________________________________________________
 
 } // fin MasterMindBase
-
