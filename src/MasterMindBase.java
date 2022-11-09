@@ -334,11 +334,9 @@ public class MasterMindBase {
      */
     public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
        int[] cod1=codeAleat(lgCode,tabCouleurs.length);
-        System.out.println(cod1[0]+" "+cod1[1]+" "+cod1[2]+" "+cod1[3]);
        int[] cod2=new int[lgCode];
         for (int i = 0; i < nbEssaisMax; i++) {
            cod2 = propositionCodeHumain(i,lgCode,tabCouleurs);
-           System.out.println(cod2[0]+" "+cod2[1]+" "+cod2[2]+" "+cod2[3]);
            if (nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]==4){
                System.out.println("vous avez trouvé le code!!!");
                return i;
