@@ -229,7 +229,7 @@ public class MasterMindBase {
 
         // tant que la saisie n'est pas bonne on redemande
         while (!codeCorrect(demande, lgCode, tabCouleurs)) {
-
+            System.out.println("Votre saise n'est pas correcte");
             System.out.println("Vueillez saisre votre Code couleur : ");
             myObj4 = new Scanner(System.in);
             demande = myObj4.nextLine();
@@ -343,8 +343,8 @@ public class MasterMindBase {
            }
            else {
                System.out.println("afficher le tableau");
-               System.out.println("vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]+" couleurs bien placées.");
-               System.out.println("Vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[1]+" mal placés :");
+               System.out.println("vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]+" pions bien placées.");
+               System.out.println("Vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[1]+" pions mal placés :");
            }
         }
         return nbEssaisMax;
@@ -548,8 +548,18 @@ public class MasterMindBase {
      */
     public static char[] saisirCouleurs() {
 
-        char[] coucou = new char[1];
-        return coucou;
+        System.out.println("Combien de couleurs Voulez-vous ?");
+        int nbCOuleurs = saisirEntierPositif();
+
+        char[] couleurs;
+        System.out.println("Veuillez rentrer les initiales des couleurs.");
+
+
+        while(!elemDiff(couleurs)){
+            System.out.println("Il y a eu des doublons, veuillez les supprimer.");
+        }
+
+        return couleurs;
 
     }
 
@@ -570,13 +580,26 @@ public class MasterMindBase {
      * Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
     public static void main(String[] args) {
-        int lgCode=4;
-        char[] tabCouleurs= {'R','B','N'};
-        int numManche =0;
-        int nbEssaisMax=4;
-        mancheHumain(lgCode,tabCouleurs,numManche,nbEssaisMax);
 
-        //System.out.println("hello world");
+
+        System.out.println("Veuillez choisir la longueur ddu code à trouver");
+        int lgCode = saisirEntierPositif();
+
+
+
+        System.out.println("Combien de parties voulez-vous faire?");
+        int numManche = saisirEntierPairPositif();
+
+
+        System.out.println("Veuillez choisir le nombre d'essaie maximum");
+        int nbEssaisMax = saisirEntierPositif();
+
+
+        // on demande tabCouleurs
+        char[] tabCouleurs = saisirCouleurs();
+
+
+        mancheHumain(lgCode,tabCouleurs,numManche,nbEssaisMax);
 
     } // fin main
 
