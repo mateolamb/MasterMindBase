@@ -344,7 +344,7 @@ public class MasterMindBase {
            else {
                System.out.println("afficher le tableau");
                System.out.println("vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]+" couleurs bien placées.");
-               System.out.println("Vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[1]+" bonne couleur mais mal placées :");
+               System.out.println("Vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[1]+" mal placés :");
            }
         }
         return nbEssaisMax;
@@ -576,7 +576,7 @@ public class MasterMindBase {
         int nbEssaisMax=4;
         mancheHumain(lgCode,tabCouleurs,numManche,nbEssaisMax);
 
-        System.out.println("hello world");
+        //System.out.println("hello world");
 
     } // fin main
 
