@@ -551,12 +551,24 @@ public class MasterMindBase {
         System.out.println("Combien de couleurs Voulez-vous ?");
         int nbCOuleurs = saisirEntierPositif();
 
-        char[] couleurs;
         System.out.println("Veuillez rentrer les initiales des couleurs.");
+        char[] couleurs = new char[nbCOuleurs];
+        Scanner myObj4 = new Scanner(System.in);
+        String demande = myObj4.nextLine();
 
+        for (int i = 0; i < demande.length(); i++) {
+            couleurs[i]=demande.charAt(i);
+        }
 
         while(!elemDiff(couleurs)){
             System.out.println("Il y a eu des doublons, veuillez les supprimer.");
+            System.out.println("Veuillez rentrer les initiales des couleurs.");
+            myObj4 = new Scanner(System.in);
+            demande = myObj4.nextLine();
+
+            for (int i = 0; i < demande.length(); i++) {
+                couleurs[i]=demande.charAt(i);
+            }
         }
 
         return couleurs;
