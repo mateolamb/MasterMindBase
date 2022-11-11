@@ -298,7 +298,7 @@ public class MasterMindBase {
                 nbCommuns += freqCod2[i];
             }
         }
-        return nbCommuns-nbBienPlaces(cod1,cod2);
+        return nbCommuns - nbBienPlaces(cod1, cod2);
     }
 
     //____________________________________________________________
@@ -317,6 +317,48 @@ public class MasterMindBase {
         return nbBienMalPlaces;
     }
 
+    public static char[][] initialiserGrille(int nbManches, int lgCode) {
+        char[][] grille = new char[nbManches][lgCode];
+        for (int i = 0; i < nbManches; i++) {
+            for (int j = 0; j < lgCode; j++) {
+                grille[i][j] = ' ';
+            }
+        }
+        return grille;
+    }
+
+
+    public static void afficher_grille(char[][] grille) {
+
+        // on affiche les côtés ordi caché lors de la partie
+        System.out.print("\n\n||///////////////||");
+        System.out.print("\n||               ||");
+        System.out.print("\n||");
+        for (int i = 0; i < grille[0].length; i++) {
+            System.out.print(" ? |");
+
+        }
+        System.out.print("|");
+        System.out.print("\n||_______________||");
+        System.out.print("\n||               ||");
+        for (int i = 0; i < grille.length; i++) {
+            System.out.print("\n||");
+            for (int j = 0; j < grille[0].length; j++) {
+                System.out.print(" " + grille[i][j] + " |");
+            }
+            System.out.print("|");
+            System.out.print("\n||---------------||");
+        }
+        System.out.println("\n||///////////////||\n\n");
+    }
+
+    public static char[][] miseAJourGrille(char[][] grille, int[] cod2, int numManche, char[] tabCouleur) {
+        for (int i = 0; i < grille[0].length; i++) {
+            grille[numManche][i] = tabCouleur[cod2[i]];
+        }
+        return grille;
+    }
+
     //____________________________________________________________
 
     //.........................................................................
@@ -333,19 +375,21 @@ public class MasterMindBase {
      * - sinon le nombre de codes proposés par le joueur humain
      */
     public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
-       int[] cod1=codeAleat(lgCode,tabCouleurs.length);
-       int[] cod2=new int[lgCode];
+        int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
+        int[] cod2 = new int[lgCode];
+        char[][] grille=initialiserGrille(nbEssaisMax, lgCode);
+        afficher_grille(grille);
         for (int i = 0; i < nbEssaisMax; i++) {
-           cod2 = propositionCodeHumain(i,lgCode,tabCouleurs);
-           if (nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]==4){
-               System.out.println("vous avez trouvé le code!!!");
-               return i;
-           }
-           else {
-               System.out.println("afficher le tableau");
-               System.out.println("vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[0]+" pions bien placées.");
-               System.out.println("Vous avez "+nbBienMalPlaces(cod1,cod2,tabCouleurs.length)[1]+" pions mal placés :");
-           }
+            cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
+            if (nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] == 4) {
+                System.out.println("vous avez trouvé le code!!!");
+                return i;
+            } else {
+                grille=miseAJourGrille(grille,cod2,i,tabCouleurs);
+                afficher_grille(grille);
+                System.out.println("vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] + " pions bien placées.");
+                System.out.println("Vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[1] + " pions mal placés :");
+            }
         }
         return nbEssaisMax;
 
@@ -498,13 +542,13 @@ public class MasterMindBase {
      */
     public static int saisirEntierPositif() {
 
-        System.out.println("Vueillez saisre un entier positif");
+        System.out.println("vueillez saisir un entier positif :");
         Scanner scan = new Scanner(System.in);
         int demande = scan.nextInt();
 
         // tant que la saisie n'est pas bonne on redemande
         while (demande < 1) {
-            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif");
+            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif :");
             scan = new Scanner(System.in);
             demande = scan.nextInt();
 
@@ -522,13 +566,13 @@ public class MasterMindBase {
      */
     public static int saisirEntierPairPositif() {
 
-        System.out.println("Vueillez saisre un entier positif pair");
+        System.out.println("Vueillez saisre un entier positif pair :");
         Scanner scan = new Scanner(System.in);
         int demande = scan.nextInt();
 
         // tant que la saisie n'est pas bonne on redemande
         while (demande < 1 || demande % 2 == 1) {
-            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif pair");
+            System.out.println("Votre saisie n'est pas correcte. Vueillez saisir un entier positif pair :");
             scan = new Scanner(System.in);
             demande = scan.nextInt();
 
@@ -557,17 +601,17 @@ public class MasterMindBase {
         String demande = myObj4.nextLine();
 
         for (int i = 0; i < demande.length(); i++) {
-            couleurs[i]=demande.charAt(i);
+            couleurs[i] = demande.charAt(i);
         }
 
-        while(!elemDiff(couleurs)){
+        while (!elemDiff(couleurs)) {
             System.out.println("Il y a eu des doublons, veuillez les supprimer.");
             System.out.println("Veuillez rentrer les initiales des couleurs.");
             myObj4 = new Scanner(System.in);
             demande = myObj4.nextLine();
 
             for (int i = 0; i < demande.length(); i++) {
-                couleurs[i]=demande.charAt(i);
+                couleurs[i] = demande.charAt(i);
             }
         }
 
@@ -594,12 +638,12 @@ public class MasterMindBase {
     public static void main(String[] args) {
 
 
-        System.out.println("Veuillez choisir la longueur ddu code à trouver");
+        System.out.print("Veuillez choisir la longueur du code à trouver, ");
         int lgCode = saisirEntierPositif();
 
 
 
-        System.out.println("Combien de parties voulez-vous faire?");
+        System.out.println("Combien de manches voulez-vous faire ?");
         int numManche = saisirEntierPairPositif();
 
 
@@ -612,6 +656,8 @@ public class MasterMindBase {
 
 
         mancheHumain(lgCode,tabCouleurs,numManche,nbEssaisMax);
+
+
 
     } // fin main
 
