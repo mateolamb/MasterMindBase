@@ -377,7 +377,7 @@ public class MasterMindBase {
     public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
         int[] cod2 = new int[lgCode];
-        char[][] grille=initialiserGrille(nbEssaisMax, lgCode);
+        char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
         afficher_grille(grille);
         for (int i = 0; i < nbEssaisMax; i++) {
             cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
@@ -385,7 +385,7 @@ public class MasterMindBase {
                 System.out.println("vous avez trouvé le code!!!");
                 return i;
             } else {
-                grille=miseAJourGrille(grille,cod2,i,tabCouleurs);
+                grille = miseAJourGrille(grille, cod2, i, tabCouleurs);
                 afficher_grille(grille);
                 System.out.println("vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] + " pions bien placées.");
                 System.out.println("Vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[1] + " pions mal placés :");
@@ -471,8 +471,17 @@ public class MasterMindBase {
      */
     public static boolean passeCodeSuivantLexico(int[] cod1, int nbCouleurs) {
 
-        return true;
-
+        for (int i = cod1.length - 1; i >= 0; i--) {
+            if (cod1[i] < nbCouleurs - 1) {
+                cod1[i]++;
+                return true;
+            } else if (cod1[i] == nbCouleurs - 1) {
+                cod1[i] = 0;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     //___________________________________________________________________
@@ -486,8 +495,15 @@ public class MasterMindBase {
      */
     public static boolean estCompat(int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
 
-        return true;
+        for (int i = 0; i < nbCoups; i++) {
 
+            int[] bienmal = nbBienMalPlaces(cod[i], cod[nbCoups], nbCouleurs);
+            if(!Arrays.equals(bienmal,rep[i])){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //___________________________________________________________________
@@ -503,6 +519,7 @@ public class MasterMindBase {
      */
     public static boolean passePropSuivante(int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
 
+        while(!estCompat(passeCodeSuivantLexico()))
         return true;
 
     }
@@ -642,7 +659,6 @@ public class MasterMindBase {
         int lgCode = saisirEntierPositif();
 
 
-
         System.out.println("Combien de manches voulez-vous faire ?");
         int numManche = saisirEntierPairPositif();
 
@@ -655,8 +671,7 @@ public class MasterMindBase {
         char[] tabCouleurs = saisirCouleurs();
 
 
-        mancheHumain(lgCode,tabCouleurs,numManche,nbEssaisMax);
-
+        mancheHumain(lgCode, tabCouleurs, numManche, nbEssaisMax);
 
 
     } // fin main
