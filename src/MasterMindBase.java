@@ -321,9 +321,9 @@ public class MasterMindBase {
     // Affichage du tableau
 
 
-    public static char[][] initialiserGrille(int nbManches, int lgCode) {
-        char[][] grille = new char[nbManches][lgCode];
-        for (int i = 0; i < nbManches; i++) {
+    public static char[][] initialiserGrille(int nbEssaiMax, int lgCode) {
+        char[][] grille = new char[nbEssaiMax][lgCode];
+        for (int i = 0; i < nbEssaiMax; i++) {
             for (int j = 0; j < lgCode; j++) {
                 grille[i][j] = ' ';
             }
@@ -503,8 +503,8 @@ public class MasterMindBase {
 
         for (int i = 0; i < nbCoups; i++) {
 
-            int[] bienMal = nbBienMalPlaces(cod[i], cod[nbCoups], nbCouleurs);
-            if (!Arrays.equals(bienMal, rep[i])) {
+            int[] nbBienMalPlaces = nbBienMalPlaces(cod[i], cod[nbCoups], nbCouleurs);
+            if (!sontEgaux(nbBienMalPlaces, rep[i])) {
                 return false;
             }
         }
@@ -524,21 +524,14 @@ public class MasterMindBase {
      * résultat : vrai ssi l'action a pu être effectuée
      */
     public static boolean passePropSuivante(int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
-        int[] cod1 = cod[nbCoups - 1];
-        passeCodeSuivantLexico(cod1, nbCouleurs);
-        cod[nbCoups] = cod1;
+        cod[nbCoups] = copieTab(cod[nbCoups - 1]);
 
-        while (!estCompat(cod, rep, nbCoups, nbCouleurs)) {
-            if (!passeCodeSuivantLexico(cod1, nbCouleurs)) {
-                return false;
-            } else {
-                cod1 = cod[nbCoups];
-                passeCodeSuivantLexico(cod1, nbCouleurs);
-                cod[nbCoups] = cod1;
+        while (passeCodeSuivantLexico(cod[nbCoups], nbCouleurs)) {
+            if (estCompat(cod, rep, nbCoups, nbCouleurs)) {
+                return true;
             }
-
         }
-        return true;
+        return false;
 
     }
 
@@ -559,26 +552,24 @@ public class MasterMindBase {
     public static int mancheOrdinateur(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
         System.out.println("Vous êtes à la manche " + numManche + ".");
         char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
-        int[][] sauvegardeCode= new int[nbEssaisMax][lgCode];
-        int[][] sauvegardeRep= new int[nbEssaisMax][2];
-        int compteur=10;
+        int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
+        int[][] sauvegardeRep = new int[nbEssaisMax][2];
+        int compteur = 1;
 
 
-
-        sauvegardeCode[0]=initTab(lgCode, 0);
+        sauvegardeCode[0] = initTab(lgCode, 0);
         grille = miseAJourGrille(grille, sauvegardeCode[0], 0, tabCouleurs);
         afficher_grille(grille);
-        sauvegardeRep[0]= reponseHumain(lgCode);
+        sauvegardeRep[0] = reponseHumain(lgCode);
 
 
         for (int i = 1; i < nbEssaisMax; i++) {
-            if(!passePropSuivante(sauvegardeCode,sauvegardeRep,i,tabCouleurs.length)) {
+            if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
                 return 0;
             }
-            passePropSuivante(sauvegardeCode,sauvegardeRep,i,tabCouleurs.length);
             grille = miseAJourGrille(grille, sauvegardeCode[i], i, tabCouleurs);
             afficher_grille(grille);
-            sauvegardeRep[i]= reponseHumain(lgCode);
+            sauvegardeRep[i] = reponseHumain(lgCode);
             compteur++;
         }
 
@@ -712,7 +703,9 @@ public class MasterMindBase {
         char[] tabCouleurs = saisirCouleurs();
 
 
-        System.out.println( mancheOrdinateur(lgCode, tabCouleurs, numManche, nbEssaisMax));
+        //        mancheHumain(lgCode, tabCouleurs, numManche, nbEssaisMax);
+
+        System.out.println(mancheOrdinateur(lgCode, tabCouleurs, numManche, nbEssaisMax));
 
     } // fin main
 
