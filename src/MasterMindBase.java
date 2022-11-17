@@ -701,11 +701,33 @@ public class MasterMindBase {
 
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
+        
+        int score_joueur = 0;
+        int score_ordi = 0;
+        int manche_actuelle = 0;
+        while(manche_actuelle<=numManche){
 
+            System.out.println("C'est à votre tour d'être le codeur.");
+            int M_h = mancheHumain(lgCode, tabCouleurs, numManche, nbEssaisMax);
 
-        //        mancheHumain(lgCode, tabCouleurs, numManche, nbEssaisMax);
+            if(M_h!=0){
+                score_joueur+=M_h;
+            }else{
 
-        System.out.println(mancheOrdinateur(lgCode, tabCouleurs, numManche, nbEssaisMax));
+            }
+
+            System.out.println("C'est au tour de notre IA d'être le codeur.");
+            int M_o  = mancheOrdinateur(lgCode, tabCouleurs, numManche, nbEssaisMax);
+
+            if(M_o!=0){
+                score_ordi+=M_h;
+            }else{
+
+            }
+
+            manche_actuelle+=2;
+        }
+
 
     } // fin main
 
