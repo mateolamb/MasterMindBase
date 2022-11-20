@@ -819,8 +819,14 @@ public class MasterMindBase {
         }
 
         System.out.println("----------------- \n\n");
-        System.out.println("C'est la fin de la partie. \n Votre score final est : " + score_joueur + ". \n Le score final de l'IA est : " + score_ordi + ".");
+        System.out.println("C'est la fin de la partie. \nVotre score final est : " + score_joueur + ". \nLe score final de l'IA est : " + score_ordi + ".");
         System.out.println("\n------------------------------\n");
+
+        if(score_joueur<score_ordi){
+            System.out.println("Vous avez gagné la parti !!! \nMerci d'avoir joué avec nous.");
+        }else{
+            System.out.println("Vous avez perdu la parti ... \nMerci d'avoir joué avec nous.");
+        }
 
     } // fin main
 
