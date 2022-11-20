@@ -79,7 +79,7 @@ public class MasterMindBase {
             }
         }
 
-        if (contient == false) {
+        if (!contient) {
             return -1;
         } else {
             return ind;
@@ -91,14 +91,14 @@ public class MasterMindBase {
 
     /**
      * pré-requis : aucun
-     * résultat : vrai ssi c est un élément de t
+     * résultat : vrai ssi c'est un élément de t
      * stratégie : utilise la fonction plusGrandIndice
      */
     public static boolean estPresent(char[] t, char c) {
 
         int result = plusGrandIndice(t, c);
 
-        if (result == -1) {
+        if(result == -1) {
             return false;
         } else {
             return true;
@@ -109,10 +109,10 @@ public class MasterMindBase {
     //______________________________________________
 
     /**
-     * pré-requis : aucun
+     * pré-requis : aucun;
      * action : affiche un doublon et 2 de ses indices dans t s'il en existe
-     * résultat : vrai ssi les éléments de t sont différents
-     * stratégie : utilise la fonction plusGrandIndice
+     * résultat : vrai ssi les éléments de t sont différents.
+     * Stratégie : utilise la fonction plusGrandIndice.
      */
     public static boolean elemDiff(char[] t) {
         for (int i = 0; i < t.length; i++) {
@@ -145,8 +145,8 @@ public class MasterMindBase {
 
     //______________________________________________
 
-    // Dans toutes les fonctions suivantes, on a comme pré-requis implicites sur les paramètres lgCode, nbCouleurs et tabCouleurs :
-    // lgCode > 0, nbCouleurs > 0, tabCouleurs.length > 0 et les éléments de tabCouleurs sont différents
+    // Dans toutes les fonctions suivantes, on a comme prérequis implicites sur les paramètres lgCode, nbCouleurs et tabCouleurs :
+    // lgCode > 0, nbCouleurs > 0, tabCouleurs.length > 0 et les éléments de tabCouleurs sont différents.
 
     // fonctions sur les codes pour la manche Humain
 
@@ -171,8 +171,8 @@ public class MasterMindBase {
     //____________________________________________________________
 
     /**
-     * pré-requis : aucun
-     * action : si codMot n'est pas correct, affiche pourquoi
+     * pré-requis : aucun.
+     * Action : si codMot n'est pas correct, affiche pourquoi
      * résultat : vrai ssi codMot est correct, c'est-à-dire de longueur lgCode et ne contenant que des éléments de tabCouleurs
      */
     public static boolean codeCorrect(String codMot, int lgCode, char[] tabCouleurs) {
@@ -184,7 +184,7 @@ public class MasterMindBase {
             for (int i = 0; i < codMot.length(); i++) {
                 //on va chercher la fonction estPresent pour savoir si le mot est correct
                 boolean est_present = estPresent(tabCouleurs, codMot.charAt(i));
-                if (est_present == false) {
+                if (!est_present) {
                     System.out.println("La lettre  " + i + " de votre mot n'est pas bonne.");
                     return false;
                 }
@@ -197,14 +197,14 @@ public class MasterMindBase {
     //____________________________________________________________
 
     /**
-     * pré-requis : les caractères de codMot sont des éléments de tabCouleurs
+     * prérequis : les caractères de codMot sont des éléments de tabCouleurs
      * résultat : le code codMot sous forme de tableau d'entiers en remplaçant chaque couleur par son indice dans tabCouleurs
      */
     public static int[] motVersEntiers(String codMot, char[] tabCouleurs) {
 
         int[] tab = new int[codMot.length()];
 
-        // on cherche l'indice grâce à la 3 eme fonction plusGrandIndice et on la met dans le tableau final
+        // on cherche l'indice grâce à la 3° fonction plusGrandIndice et on la met dans le tableau final
         for (int i = 0; i < codMot.length(); i++) {
             tab[i] = plusGrandIndice(tabCouleurs, codMot.charAt(i));
         }
@@ -216,7 +216,7 @@ public class MasterMindBase {
     //____________________________________________________________
 
     /**
-     * pré-requis : aucun
+     * pré-requis : aucun.
      * action : demande au joueur humain de saisir la (nbCoups + 1)ème proposition de code sous forme de mot, avec re-saisie éventuelle jusqu'à ce
      * qu'elle soit correcte (le paramètre nbCoups ne sert que pour l'affichage)
      * résultat : le code saisi sous forme de tableau d'entiers
@@ -271,16 +271,16 @@ public class MasterMindBase {
     //____________________________________________________________
 
     /**
-     * pré-requis : les éléments de cod sont des entiers de 0 à nbCouleurs-1
-     * résultat : un tableau de longueur nbCouleurs contenant à chaque indice i le nombre d'occurrences de i dans cod
+     * prérequis : les éléments de cod sont des entiers de 0 à nbCouleurs-1
+     * résultat : un tableau de longueur nbCouleurs contenant à chaque indice i le nombre d'occurrences de "i" dans cod
      * Par exemple, si cod = (1,0,2,0) et nbCouleurs = 6 la fonction retourne (2,1,1,0,0,0)
      */
     public static int[] tabFrequence(int[] cod, int nbCouleurs) {
 
         int[] freq = new int[nbCouleurs];
 
-        // pour chaque valeur de cod, on prends cette valeur qui correspond donc a l'indice du tableau freq et on ajoute 1
-        for (int i = 0; i < cod.length; i++) {
+        // pour chaque valeur de cod, on prend cette valeur qui correspond donc à l'indice du tableau freq et on ajoute 1
+        for(int i = 0; i < cod.length; i++) {
             freq[cod[i]]++;
         }
         return freq;
@@ -348,25 +348,58 @@ public class MasterMindBase {
     public static void afficher_grille(char[][] grille) {
 
         // on affiche les côtés ordi caché lors de la partie
-        System.out.print("\n\n||///////////////||");
-        System.out.print("\n||               ||");
-        System.out.print("\n||");
+        System.out.print("\n\n||||");
+        for (int i = 0; i < grille[0].length; i++) {
+            System.out.print("///");
+        }
+        System.out.print("||\n");
+
+
+        System.out.print("||");
+        for (int i = 0; i < grille[0].length; i++) {
+            System.out.print("    ");
+        }
+        System.out.print("||\n");
+
+        System.out.print("||");
         for (int i = 0; i < grille[0].length; i++) {
             System.out.print(" ? |");
 
         }
         System.out.print("|");
-        System.out.print("\n||_______________||");
-        System.out.print("\n||               ||");
+
+        System.out.print("\n||");
+        for (int k = 0; k < grille[0].length; k++) {
+            System.out.print("---");
+        }
+        System.out.print("||\n");
+
+        System.out.print("||");
+        for (int i = 0; i < grille[0].length; i++) {
+            System.out.print("    ");
+        }
+        System.out.print("||\n");
+
+
         for (int i = 0; i < grille.length; i++) {
-            System.out.print("\n||");
+            System.out.print("||");
             for (int j = 0; j < grille[0].length; j++) {
                 System.out.print(" " + grille[i][j] + " |");
             }
             System.out.print("|");
-            System.out.print("\n||---------------||");
+            System.out.print("\n||");
+            for (int k = 0; k < grille[0].length; k++) {
+                System.out.print("---");
+            }
+            System.out.print("||\n");
         }
-        System.out.println("\n||///////////////||\n\n");
+
+
+        System.out.print("\n\n||||");
+        for (int i = 0; i < grille[0].length; i++) {
+            System.out.print("///");
+        }
+        System.out.print("||\n");
     }
 
 
@@ -386,7 +419,8 @@ public class MasterMindBase {
      * - sinon le nombre de codes proposés par le joueur humain
      */
     public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
-        //System.out.println("Vous êtes à la manche " + numManche + ".");
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
         int[] cod2 = new int[lgCode];
         char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
@@ -569,7 +603,8 @@ public class MasterMindBase {
      * - sinon le nombre de codes proposés par l'ordinateur
      */
     public static int mancheOrdinateur(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
-        //System.out.println("Vous êtes à la manche " + numManche + ".");
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vous êtes à la manche " + numManche + ".");
         char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
         int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
         int[][] sauvegardeRep = new int[nbEssaisMax][2];
@@ -580,7 +615,10 @@ public class MasterMindBase {
         grille = miseAJourGrille(grille, sauvegardeCode[0], 0, tabCouleurs);
         afficher_grille(grille);
         sauvegardeRep[0] = reponseHumain(lgCode);
-
+        if(sauvegardeRep[0][0]==lgCode){
+            System.out.println("!!! L'IA a trouvé le bon code !!!");
+            return  1;
+        }
 
         for (int i = 1; i < nbEssaisMax; i++) {
             if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
@@ -589,6 +627,11 @@ public class MasterMindBase {
             grille = miseAJourGrille(grille, sauvegardeCode[i], i, tabCouleurs);
             afficher_grille(grille);
             sauvegardeRep[i] = reponseHumain(lgCode);
+            if(sauvegardeRep[i][0]==lgCode){
+                System.out.println("!!! L'IA a trouvé le bon code !!!");
+
+                return  compteur;
+            }
             compteur++;
         }
 
@@ -671,7 +714,7 @@ public class MasterMindBase {
         char[] couleurs = new char[nbCOuleurs];
         Scanner myObj4 = new Scanner(System.in);
         String demande = myObj4.nextLine();
-        System.out.println("\n------------------------------\n");
+        demande =demande.toUpperCase();
 
         for (int i = 0; i < demande.length(); i++) {
             couleurs[i] = demande.charAt(i);
@@ -743,7 +786,6 @@ public class MasterMindBase {
         int score_ordi = 0;
         for (int i = 0; i < numManche; i++) {
 
-            System.out.println("Manche n° " + i+1);
             System.out.println("\n------------------------------\n");
 
             if (i % 2 == 0) {
@@ -752,13 +794,10 @@ public class MasterMindBase {
                 System.out.println("\n------------------------------\n");
                 int M_h = mancheHumain(lgCode, tabCouleurs, i, nbEssaisMax);
 
-                if (M_h != 0) {
-                    score_joueur += M_h;
-                    System.out.println("Votre score est : " + score_joueur);
-                    System.out.println("\n------------------------------\n");
-                } else {
-                    System.out.println("a completer");
-                }
+                score_joueur += M_h;
+                System.out.println("Votre score est : " + score_joueur);
+                System.out.println("\n------------------------------\n");
+
 
             } else {
 
@@ -771,7 +810,7 @@ public class MasterMindBase {
                     System.out.println("Le score de l'IA est : " + score_ordi);
                     System.out.println("\n------------------------------\n");
                 } else {
-                    System.out.println("Vous vous êtes trompé dans vos saisies. Passons à la manche suivante.");
+                    System.out.println("Soit l'ordi a trouvé soit Vous vous êtes trompé dans vos saisies. Passons à la manche suivante.");
                 }
 
             }
