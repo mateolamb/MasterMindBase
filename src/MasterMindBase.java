@@ -810,7 +810,7 @@ public class MasterMindBase {
                     System.out.println("Le score de l'IA est : " + score_ordi);
                     System.out.println("\n------------------------------\n");
                 } else {
-                    System.out.println("Soit l'ordi a trouvé soit Vous vous êtes trompé dans vos saisies. Passons à la manche suivante.");
+                    System.out.println("Vous vous êtes trompé dans vos saisies. Passons à la manche suivante.");
                 }
 
             }
