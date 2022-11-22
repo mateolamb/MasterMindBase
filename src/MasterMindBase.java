@@ -98,11 +98,7 @@ public class MasterMindBase {
 
         int result = plusGrandIndice(t, c);
 
-        if(result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result != -1;
 
     }
 
@@ -225,6 +221,8 @@ public class MasterMindBase {
 
         // on demande la saisie
         System.out.println("\n------------------------------\n");
+        System.out.println("Vous êtes a l'essai n° "+nbCoups);
+        System.out.println("\n------------------------------\n");
         System.out.println("Veuillez saisir votre Code couleur : ");
         Scanner myObj4 = new Scanner(System.in);
         String demande = myObj4.nextLine();
@@ -319,8 +317,7 @@ public class MasterMindBase {
     public static int[] nbBienMalPlaces(int[] cod1, int[] cod2, int nbCouleurs) {
         int nbBienPlaces = nbBienPlaces(cod1, cod2);
         int nbCommuns = nbCommuns(cod1, cod2, nbCouleurs);
-        int[] nbBienMalPlaces = {nbBienPlaces, nbCommuns};
-        return nbBienMalPlaces;
+        return new int[]{nbBienPlaces, nbCommuns};
     }
 
 
@@ -349,8 +346,11 @@ public class MasterMindBase {
         System.out.println("\n------------------------------\n");
         System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
-        int[] cod2 = new int[lgCode];
+        int[] cod2;
+        int[] nbBienMal=new int[2];
         for (int i = 1; i <= nbEssaisMax; i++) {
+            System.out.println("\n------------------------------\n");
+            System.out.println("Vous pouvez choisir entre ses couleurs : "+listElem(tabCouleurs));
             cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
             if (nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
@@ -359,17 +359,18 @@ public class MasterMindBase {
 
                 return i;
             } else {
+                nbBienMal= nbBienMalPlaces(cod1,cod2,tabCouleurs.length);
+
                 System.out.println("Voici le code que vous avez rentré.");
                 System.out.println(entiersVersMot(cod2,tabCouleurs));
                 System.out.println("\n------------------------------\n");
-                System.out.println("vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] + " pion(s) bien placé(s).");
-                System.out.println("Vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[1] + " pion(s) mal placé(s) :");
+                System.out.println("vous avez " + nbBienMal[0] + " pion(s) bien placé(s).");
+                System.out.println("Vous avez " + nbBienMal[1] + " pion(s) mal placé(s) :");
                 System.out.println("\n------------------------------\n");
 
             }
         }
-        return nbEssaisMax;
-    // malus = nbMalPlaces + 2 × (lgCode − (nbBienPlaces + nbMalPlaces))
+        return nbBienMal[1]+2*(lgCode-(nbBienMal[0]+nbBienMal[1]));
     }
 
     //____________________________________________________________
@@ -560,8 +561,7 @@ public class MasterMindBase {
 
         }
 
-        return 0 ;  //todo malus
-        // malus = nbMalPlaces + 2 × (lgCode − (nbBienPlaces + nbMalPlaces))
+        return sauvegardeRep[lgCode-1][1]+2*(lgCode-(sauvegardeRep[lgCode-1][1]+sauvegardeRep[lgCode-1][0]));
 
     }
 
