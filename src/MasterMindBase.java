@@ -327,80 +327,7 @@ public class MasterMindBase {
     // Affichage du tableau
 
 
-    public static char[][] initialiserGrille(int nbEssaiMax, int lgCode) {
-        char[][] grille = new char[nbEssaiMax][lgCode];
-        for (int i = 0; i < nbEssaiMax; i++) {
-            for (int j = 0; j < lgCode; j++) {
-                grille[i][j] = ' ';
-            }
-        }
-        return grille;
-    }
 
-    public static char[][] miseAJourGrille(char[][] grille, int[] cod2, int nbCoups, char[] tabCouleur) {
-        for (int i = 0; i < grille[0].length; i++) {
-            grille[nbCoups][i] = tabCouleur[cod2[i]];
-        }
-        return grille;
-    }
-
-
-    public static void afficher_grille(char[][] grille) {
-
-        // on affiche les côtés ordi caché lors de la partie
-        System.out.print("\n\n||||");
-        for (int i = 0; i < grille[0].length; i++) {
-            System.out.print("///");
-        }
-        System.out.print("||\n");
-
-
-        System.out.print("||");
-        for (int i = 0; i < grille[0].length; i++) {
-            System.out.print("    ");
-        }
-        System.out.print("||\n");
-
-        System.out.print("||");
-        for (int i = 0; i < grille[0].length; i++) {
-            System.out.print(" ? |");
-
-        }
-        System.out.print("|");
-
-        System.out.print("\n||");
-        for (int k = 0; k < grille[0].length; k++) {
-            System.out.print("---");
-        }
-        System.out.print("||\n");
-
-        System.out.print("||");
-        for (int i = 0; i < grille[0].length; i++) {
-            System.out.print("    ");
-        }
-        System.out.print("||\n");
-
-
-        for (int i = 0; i < grille.length; i++) {
-            System.out.print("||");
-            for (int j = 0; j < grille[0].length; j++) {
-                System.out.print(" " + grille[i][j] + " |");
-            }
-            System.out.print("|");
-            System.out.print("\n||");
-            for (int k = 0; k < grille[0].length; k++) {
-                System.out.print("---");
-            }
-            System.out.print("||\n");
-        }
-
-
-        System.out.print("\n\n||||");
-        for (int i = 0; i < grille[0].length; i++) {
-            System.out.print("///");
-        }
-        System.out.print("||\n");
-    }
 
 
     //____________________________________________________________
@@ -423,9 +350,7 @@ public class MasterMindBase {
         System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
         int[] cod2 = new int[lgCode];
-        char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
-        afficher_grille(grille);
-        for (int i = 0; i < nbEssaisMax; i++) {
+        for (int i = 1; i <= nbEssaisMax; i++) {
             cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
             if (nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
@@ -434,8 +359,8 @@ public class MasterMindBase {
 
                 return i;
             } else {
-                grille = miseAJourGrille(grille, cod2, i, tabCouleurs);
-                afficher_grille(grille);
+                System.out.println("Voici le code que vous avez rentré.");
+                System.out.println(entiersVersMot(cod2,tabCouleurs));
                 System.out.println("\n------------------------------\n");
                 System.out.println("vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] + " pion(s) bien placé(s).");
                 System.out.println("Vous avez " + nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[1] + " pion(s) mal placé(s) :");
@@ -444,7 +369,7 @@ public class MasterMindBase {
             }
         }
         return nbEssaisMax;
-
+    // malus = nbMalPlaces + 2 × (lgCode − (nbBienPlaces + nbMalPlaces))
     }
 
     //____________________________________________________________
@@ -605,37 +530,38 @@ public class MasterMindBase {
     public static int mancheOrdinateur(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
         System.out.println("\n------------------------------\n");
         System.out.println("Vous êtes à la manche " + numManche + ".");
-        char[][] grille = initialiserGrille(nbEssaisMax, lgCode);
         int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
         int[][] sauvegardeRep = new int[nbEssaisMax][2];
-        int compteur = 1;
 
 
         sauvegardeCode[0] = initTab(lgCode, 0);
-        grille = miseAJourGrille(grille, sauvegardeCode[0], 0, tabCouleurs);
-        afficher_grille(grille);
+        System.out.println("Voici le code proposé par l'ordinateur.");
+        System.out.println("\n------------------------------\n");
+        System.out.println(entiersVersMot(sauvegardeCode[0], tabCouleurs));
         sauvegardeRep[0] = reponseHumain(lgCode);
         if(sauvegardeRep[0][0]==lgCode){
             System.out.println("!!! L'IA a trouvé le bon code !!!");
             return  1;
         }
 
-        for (int i = 1; i < nbEssaisMax; i++) {
+        for (int i = 1; i <= nbEssaisMax; i++) {
             if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
                 return 0;
             }
-            grille = miseAJourGrille(grille, sauvegardeCode[i], i, tabCouleurs);
-            afficher_grille(grille);
+            System.out.println("Voici le code proposé par l'ordinateur.");
+            System.out.println("\n------------------------------\n");
+            System.out.println(entiersVersMot(sauvegardeCode[i], tabCouleurs));
             sauvegardeRep[i] = reponseHumain(lgCode);
             if(sauvegardeRep[i][0]==lgCode){
                 System.out.println("!!! L'IA a trouvé le bon code !!!");
 
-                return  compteur;
+                return  i;
             }
-            compteur++;
+
         }
 
-        return compteur;
+        return 0 ;  //todo malus
+        // malus = nbMalPlaces + 2 × (lgCode − (nbBienPlaces + nbMalPlaces))
 
     }
 
@@ -714,14 +640,17 @@ public class MasterMindBase {
         char[] couleurs = new char[nbCOuleurs];
         Scanner myObj4 = new Scanner(System.in);
         String demande = myObj4.nextLine();
-        demande =demande.toUpperCase();
 
         for (int i = 0; i < demande.length(); i++) {
             couleurs[i] = demande.charAt(i);
         }
 
-        while (!elemDiff(couleurs)) {
-            System.out.println("Il y a eu des doublons, veuillez les supprimer.");
+        while (!elemDiff(couleurs) || !demande.equals(demande.toUpperCase())){
+            if(!elemDiff(couleurs)) {
+                System.out.println("Il y a eu des doublons, veuillez les supprimer.");
+            }else{
+                System.out.println("Les lettres ne sont pas en majuscule.");
+            }
             System.out.println("Veuillez rentrer les initiales des couleurs.");
             myObj4 = new Scanner(System.in);
             demande = myObj4.nextLine();
@@ -784,11 +713,11 @@ public class MasterMindBase {
 
         int score_joueur = 0;
         int score_ordi = 0;
-        for (int i = 0; i < numManche; i++) {
+        for (int i = 1; i <= numManche; i++) {
 
             System.out.println("\n------------------------------\n");
 
-            if (i % 2 == 0) {
+            if (i % 2 == 1) {
 
                 System.out.println("C'est à votre tour d'être le codeur.");
                 System.out.println("\n------------------------------\n");
