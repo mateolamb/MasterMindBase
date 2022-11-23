@@ -343,29 +343,26 @@ public class MasterMindEtendu {
         System.out.println("\n------------------------------\n");
         System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
-        int[] cod2;
-        int[] nbBienMal = new int[2];
+        int[][] sauvegardeCode= new int[nbEssaisMax][lgCode];
+        int[][] sauvegardeRep = new int[nbEssaisMax][2];
         for (int i = 1; i <= nbEssaisMax; i++) {
-            cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
-            if (nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] == lgCode) {
+            System.out.println("\n------------------------------\n");
+            System.out.println("Vous pouvez choisir entre ses couleurs : "+listElem(tabCouleurs));
+            sauvegardeCode[i] = propositionCodeHumain(i, lgCode, tabCouleurs);
+            if (nbBienMalPlaces(cod1, sauvegardeCode[i], tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
                 System.out.println("!!! vous avez trouvé le code !!!");
                 System.out.println("\n------------------------------\n");
 
                 return i;
             } else {
-                nbBienMal = nbBienMalPlaces(cod1, cod2, tabCouleurs.length);
+                sauvegardeRep[i] = nbBienMalPlaces(cod1, sauvegardeCode[i], tabCouleurs.length);
 
-                System.out.println("Voici le code que vous avez rentré.");
-                System.out.println(entiersVersMot(cod2, tabCouleurs));
-                System.out.println("\n------------------------------\n");
-                System.out.println("vous avez " + nbBienMal[0] + " pion(s) bien placé(s).");
-                System.out.println("Vous avez " + nbBienMal[1] + " pion(s) mal placé(s) :");
-                System.out.println("\n------------------------------\n");
+                affichePlateau(sauvegardeCode,sauvegardeRep,i,tabCouleurs);
 
             }
         }
-        return nbBienMal[1] + 2 * (lgCode - (nbBienMal[0] + nbBienMal[1]));
+        return sauvegardeRep[nbEssaisMax-1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax-1][0] + sauvegardeRep[nbEssaisMax-1][1]));
     }
 
     //____________________________________________________________
@@ -533,7 +530,7 @@ public class MasterMindEtendu {
         sauvegardeCode[0] = initTab(lgCode, 0);
         System.out.println("Voici le code proposé par l'ordinateur.");
         System.out.println("\n------------------------------\n");
-        System.out.println(entiersVersMot(sauvegardeCode[0], tabCouleurs));
+        affichePlateau(sauvegardeCode,sauvegardeRep,0,tabCouleurs);
         sauvegardeRep[0] = reponseHumain(lgCode);
         if (sauvegardeRep[0][0] == lgCode) {
             System.out.println("!!! L'IA a trouvé le bon code !!!");
@@ -546,7 +543,7 @@ public class MasterMindEtendu {
             }
             System.out.println("Voici le code proposé par l'ordinateur.");
             System.out.println("\n------------------------------\n");
-            System.out.println(entiersVersMot(sauvegardeCode[i], tabCouleurs));
+            affichePlateau(sauvegardeCode,sauvegardeRep,i,tabCouleurs);
             sauvegardeRep[i] = reponseHumain(lgCode);
             if (sauvegardeRep[i][0] == lgCode) {
                 System.out.println("!!! L'IA a trouvé le bon code !!!");
@@ -556,7 +553,7 @@ public class MasterMindEtendu {
 
         }
 
-        return sauvegardeRep[lgCode - 1][1] + 2 * (lgCode - (sauvegardeRep[lgCode - 1][1] + sauvegardeRep[lgCode - 1][0]));
+        return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][1] + sauvegardeRep[nbEssaisMax - 1][0]));
 
     }
 
@@ -661,6 +658,78 @@ public class MasterMindEtendu {
     }
 
     //___________________________________________________________________
+    // ETENDU
+    //___________________________________________________________________
+
+    // Affichage du tableau
+
+
+
+
+    public static void affichePlateau(int [][] cod, int [][] rep, int nbCoups, char[] tabCouleurs) {
+
+        // on affiche les côtés ordi caché lors de la partie
+        System.out.print("\n\n||");
+        for (int i = 0; i < cod[0].length; i++) {
+            if (i==cod[0].length-1)System.out.print("///");
+            else System.out.print("////");
+        }
+        System.out.print("||\n");
+
+
+        System.out.print("||");
+        for (int i = 0; i < cod[0].length; i++) {
+            if (i==cod[0].length-1) System.out.print("   ");
+            else System.out.print("    ");
+        }
+        System.out.print("||\n");
+
+        System.out.print("||");
+        for (int i = 0; i < cod[0].length; i++) {
+            System.out.print(" ? |");
+
+        }
+        System.out.print("|");
+
+        System.out.print("\n||");
+        for (int k = 0; k < cod[0].length; k++) {
+            if (k==cod[0].length-1) System.out.print("---");
+            else System.out.print("----");
+        }
+        System.out.print("||\n");
+
+        System.out.print("||");
+        for (int i = 0; i < cod[0].length; i++) {
+            if (i==cod[0].length-1) System.out.print("   ");
+            else System.out.print("    ");
+        }
+        System.out.print("||\n");
+
+
+        for (int i = 0; i <cod.length; i++) {
+            System.out.print("||");
+            for (int j = 0; j < cod[0].length; j++) {
+                if (i<=nbCoups)System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
+                else System.out.print("   |");
+            }
+            System.out.print("|");
+            System.out.print("\n||");
+            for (int k = 0; k < cod[0].length; k++) {
+                if (k==cod[0].length-1) System.out.print("---");
+                else System.out.print("----");
+            }
+            System.out.print("||\n");
+        }
+
+
+        System.out.print("||");
+        for (int i = 0; i < cod[0].length; i++) {
+            if (i==cod[0].length-1) System.out.print("///");
+            else System.out.print("////");
+        }
+        System.out.print("||\n");
+    }
+
 
     //.........................................................................
     // PROGRAMME PRINCIPAL
@@ -705,6 +774,7 @@ public class MasterMindEtendu {
 
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
+
 
         int score_joueur = 0;
         int score_ordi = 0;
@@ -755,127 +825,5 @@ public class MasterMindEtendu {
     } // fin main
 
 
-    // Affichage du tableau
 
-
-//    public static char[][] initialiserGrille(int nbEssaiMax, int lgCode) {
-//        char[][] grille = new char[nbEssaiMax][lgCode];
-//        for (int i = 0; i < nbEssaiMax; i++) {
-//            for (int j = 0; j < lgCode; j++) {
-//                grille[i][j] = ' ';
-//            }
-//        }
-//        return grille;
-//    }
-//
-//    public static char[][] miseAJourGrille(char[][] grille, int[] cod2, int nbCoups, char[] tabCouleur) {
-//        for (int i = 0; i < grille[0].length; i++) {
-//            grille[nbCoups][i] = tabCouleur[cod2[i]];
-//        }
-//        return grille;
-//    }
-//
-//
-//    public static void afficher_grille(char[][] grille) {
-//
-//        // on affiche les côtés ordi caché lors de la partie
-//        System.out.print("\n\n||///////////////||");
-//        System.out.print("\n||               ||");
-//        System.out.print("\n||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print(" ? |");
-//
-//        }
-//        System.out.print("|");
-//        System.out.print("\n||_______________||");
-//        System.out.print("\n||               ||");
-//        for (int i = 0; i < grille.length; i++) {
-//            System.out.print("\n||");
-//            for (int j = 0; j < grille[0].length; j++) {
-//                System.out.print(" " + grille[i][j] + " |");
-//            }
-//            System.out.print("|");
-//            System.out.print("\n||---------------||");
-//        }
-//        System.out.println("\n||///////////////||\n\n");
-//    }
-//
-//
-//
-//
-//
-//    public static char[][] initialiserGrille(int nbEssaiMax, int lgCode) {
-//        char[][] grille = new char[nbEssaiMax][lgCode];
-//        for (int i = 0; i < nbEssaiMax; i++) {
-//            for (int j = 0; j < lgCode; j++) {
-//                grille[i][j] = ' ';
-//            }
-//        }
-//        return grille;
-//    }
-//
-//    public static char[][] miseAJourGrille(char[][] grille, int[] cod2, int nbCoups, char[] tabCouleur) {
-//        for (int i = 0; i < grille[0].length; i++) {
-//            grille[nbCoups][i] = tabCouleur[cod2[i]];
-//        }
-//        return grille;
-//    }
-//
-//
-//    public static void afficher_grille(char[][] grille) {
-//
-//        // on affiche les côtés ordi caché lors de la partie
-//        System.out.print("\n\n||||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print("///");
-//        }
-//        System.out.print("||\n");
-//
-//
-//        System.out.print("||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print("    ");
-//        }
-//        System.out.print("||\n");
-//
-//        System.out.print("||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print(" ? |");
-//
-//        }
-//        System.out.print("|");
-//
-//        System.out.print("\n||");
-//        for (int k = 0; k < grille[0].length; k++) {
-//            System.out.print("---");
-//        }
-//        System.out.print("||\n");
-//
-//        System.out.print("||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print("    ");
-//        }
-//        System.out.print("||\n");
-//
-//
-//        for (int i = 0; i < grille.length; i++) {
-//            System.out.print("||");
-//            for (int j = 0; j < grille[0].length; j++) {
-//                System.out.print(" " + grille[i][j] + " |");
-//            }
-//            System.out.print("|");
-//            System.out.print("\n||");
-//            for (int k = 0; k < grille[0].length; k++) {
-//                System.out.print("---");
-//            }
-//            System.out.print("||\n");
-//        }
-//
-//
-//        System.out.print("\n\n||||");
-//        for (int i = 0; i < grille[0].length; i++) {
-//            System.out.print("///");
-//        }
-//        System.out.print("||\n");
-//    }
 }
