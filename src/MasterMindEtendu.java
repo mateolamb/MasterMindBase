@@ -362,6 +362,15 @@ public class MasterMindEtendu {
 
             }
         }
+
+        char[] couleurs_a_trouver = new char[cod1.length];
+        for (int i = 0; i < cod1.length; i++) {
+            couleurs_a_trouver[i] = tabCouleurs[cod1[i]];
+        }
+        System.out.print("Vous avez atteint le nombre d'essaies maximum. \nLe code à trouver était ");
+        System.out.println(listElem(couleurs_a_trouver));
+        System.out.println("\n------------------------------\n");
+
         return sauvegardeRep[nbEssaisMax-1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax-1][0] + sauvegardeRep[nbEssaisMax-1][1]));
     }
 
@@ -539,6 +548,18 @@ public class MasterMindEtendu {
 
         for (int i = 1; i <= nbEssaisMax; i++) {
             if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+
+                System.out.println("Vous vous êtes trompé dans vos saisies.");
+                System.out.println("\n------------------------------\n");
+                System.out.println("Veuillez rentrer votre code secret.");
+                char[] cod_a_trouver = saisirCouleurs();
+                String mot_a_trouver = "";
+                for (int j = 0; j < cod_a_trouver.length; j++) {
+                    mot_a_trouver += cod_a_trouver[j];
+                }
+                System.out.println("\n------------------------------\n");
+                afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, i, lgCode, tabCouleurs);
+
                 return 0;
             }
             System.out.println("Voici le code proposé par l'ordinateur.");
@@ -552,6 +573,17 @@ public class MasterMindEtendu {
             }
 
         }
+
+        System.out.println("Vous vous êtes trompé dans vos saisies.");
+        System.out.println("\n------------------------------\n");
+        System.out.println("Veuillez rentrer votre code secret.");
+        char[] cod_a_trouver = saisirCouleurs();
+        String mot_a_trouver = "";
+        for (int j = 0; j < cod_a_trouver.length; j++) {
+            mot_a_trouver += cod_a_trouver[j];
+        }
+        System.out.println("\n------------------------------\n");
+        afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, nbEssaisMax, lgCode, tabCouleurs);
 
         return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][1] + sauvegardeRep[nbEssaisMax - 1][0]));
 
@@ -661,9 +693,41 @@ public class MasterMindEtendu {
     // ETENDU
     //___________________________________________________________________
 
+
+    // on demande à l'utilisateur sa réponse
+
+    /**
+     * pré-requis : cod est une matrice, rep est une matrice à 2 colonnes,
+     * 60 <= nbCoups < cod.length, nbCoups < rep.length,
+     * les éléments de cod sont des entiers de 0 à tabCouleurs.length -1
+     * et codMot est incorrect ou incompatible avec les nbCoups
+     * premières lignes de cod et de rep
+     * action : affiche les erreurs d’incorrection ou d’incompatibilité
+     */
+    public static void afficheErreurs(String codMot, int[][] cod, int[][] rep, int nbCoups, int lgCode, char[] tabCouleurs) {
+
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vérification de votre code couleur...");
+        if(!codeCorrect(codMot, lgCode, tabCouleurs)){
+            System.out.println("Votre choix de code de base n'était donc pas bon.");
+        }
+
+        int[] codmot_entier = motVersEntiers(codMot, tabCouleurs);
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vérification de vos réponses...\n");
+        System.out.println("\n------------------------------\n");
+
+        for (int i = 0; i < nbCoups; i++) {
+
+            int[] nbBienMalPlaces = nbBienMalPlaces(cod[i], codmot_entier, tabCouleurs.length);
+            if (!sontEgaux(nbBienMalPlaces, rep[i])) {
+                System.out.println("Votre réponse " + i + " (" + rep[i][0] + "," + rep[i][1] + ") n'est pas vraie.");
+            }
+        }
+
+    }
+
     // Affichage du tableau
-
-
 
 
     public static void affichePlateau(int [][] cod, int [][] rep, int nbCoups, char[] tabCouleurs) {
