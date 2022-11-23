@@ -348,15 +348,15 @@ public class MasterMindEtendu {
         for (int i = 1; i <= nbEssaisMax; i++) {
             System.out.println("\n------------------------------\n");
             System.out.println("Vous pouvez choisir entre ses couleurs : "+listElem(tabCouleurs));
-            sauvegardeCode[i] = propositionCodeHumain(i, lgCode, tabCouleurs);
-            if (nbBienMalPlaces(cod1, sauvegardeCode[i], tabCouleurs.length)[0] == lgCode) {
+            sauvegardeCode[i-1] = propositionCodeHumain(i, lgCode, tabCouleurs);
+            if (nbBienMalPlaces(cod1, sauvegardeCode[i-1], tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
                 System.out.println("!!! vous avez trouvé le code !!!");
                 System.out.println("\n------------------------------\n");
 
                 return i;
             } else {
-                sauvegardeRep[i] = nbBienMalPlaces(cod1, sauvegardeCode[i], tabCouleurs.length);
+                sauvegardeRep[i-1] = nbBienMalPlaces(cod1, sauvegardeCode[i-1], tabCouleurs.length);
 
                 affichePlateau(sauvegardeCode,sauvegardeRep,i,tabCouleurs);
 
@@ -539,7 +539,7 @@ public class MasterMindEtendu {
         sauvegardeCode[0] = initTab(lgCode, 0);
         System.out.println("Voici le code proposé par l'ordinateur.");
         System.out.println("\n------------------------------\n");
-        affichePlateau(sauvegardeCode,sauvegardeRep,0,tabCouleurs);
+        affichePlateau(sauvegardeCode,sauvegardeRep,1,tabCouleurs);
         sauvegardeRep[0] = reponseHumain(lgCode);
         if (sauvegardeRep[0][0] == lgCode) {
             System.out.println("!!! L'IA a trouvé le bon code !!!");
@@ -773,7 +773,7 @@ public class MasterMindEtendu {
         for (int i = 0; i <cod.length; i++) {
             System.out.print("||");
             for (int j = 0; j < cod[0].length; j++) {
-                if (i<=nbCoups)System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
+                if (i<nbCoups)System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
                 else System.out.print("   |");
             }
             System.out.print("|");
