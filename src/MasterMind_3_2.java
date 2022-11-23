@@ -221,7 +221,7 @@ public class MasterMind_3_2 {
 
         // on demande la saisie
         System.out.println("\n------------------------------\n");
-        System.out.println("Vous êtes a l'essai n° "+nbCoups);
+        System.out.println("Vous êtes a l'essai n° " + nbCoups);
         System.out.println("\n------------------------------\n");
         System.out.println("Veuillez saisir votre Code couleur : ");
         Scanner myObj4 = new Scanner(System.in);
@@ -278,7 +278,7 @@ public class MasterMind_3_2 {
         int[] freq = new int[nbCouleurs];
 
         // pour chaque valeur de cod, on prend cette valeur qui correspond donc à l'indice du tableau freq et on ajoute 1
-        for(int i = 0; i < cod.length; i++) {
+        for (int i = 0; i < cod.length; i++) {
             freq[cod[i]]++;
         }
         return freq;
@@ -324,9 +324,6 @@ public class MasterMind_3_2 {
     // Affichage du tableau
 
 
-
-
-
     //____________________________________________________________
 
     //.........................................................................
@@ -347,10 +344,10 @@ public class MasterMind_3_2 {
         System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
         int[] cod2;
-        int[] nbBienMal=new int[2];
+        int[] nbBienMal = new int[2];
         for (int i = 1; i <= nbEssaisMax; i++) {
             System.out.println("\n------------------------------\n");
-            System.out.println("Vous pouvez choisir entre ses couleurs : "+listElem(tabCouleurs));
+            System.out.println("Vous pouvez choisir entre ses couleurs : " + listElem(tabCouleurs));
             cod2 = propositionCodeHumain(i, lgCode, tabCouleurs);
             if (nbBienMalPlaces(cod1, cod2, tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
@@ -359,10 +356,9 @@ public class MasterMind_3_2 {
 
                 return i;
             } else {
-                nbBienMal= nbBienMalPlaces(cod1,cod2,tabCouleurs.length);
-
+                nbBienMal = nbBienMalPlaces(cod1, cod2, tabCouleurs.length);
                 System.out.println("Voici le code que vous avez rentré.");
-                System.out.println(entiersVersMot(cod2,tabCouleurs));
+                System.out.println(entiersVersMot(cod2, tabCouleurs));
                 System.out.println("\n------------------------------\n");
                 System.out.println("vous avez " + nbBienMal[0] + " pion(s) bien placé(s).");
                 System.out.println("Vous avez " + nbBienMal[1] + " pion(s) mal placé(s) :");
@@ -379,7 +375,7 @@ public class MasterMind_3_2 {
         System.out.print("Vous avez atteint le nombre d'essaies maximum. \nLe code à trouver était ");
         System.out.println(listElem(couleurs_a_trouver));
         System.out.println("\n------------------------------\n");
-        return nbBienMal[1]+2*(lgCode-(nbBienMal[0]+nbBienMal[1]));
+        return nbBienMal[1] + 2 * (lgCode - (nbBienMal[0] + nbBienMal[1]));
     }
 
     //____________________________________________________________
@@ -523,6 +519,49 @@ public class MasterMind_3_2 {
 
     }
 
+    public static String devoile_reponse(int lgCode, char[] tabCouleurs) {
+
+        System.out.println("Veuillez saisir votre réponse : ");
+        Scanner myObj4 = new Scanner(System.in);
+        String demande = myObj4.nextLine();
+        System.out.println("\n------------------------------\n");
+        //on retourne le code sous forme de tableau d'entier (grâce à la fonction motVersEntiers
+        return demande;
+
+    }
+
+
+    /**
+     * pré-requis : cod est une matrice, rep est une matrice à 2 colonnes,
+     * 60 <= nbCoups < cod.length, nbCoups < rep.length,
+     * les éléments de cod sont des entiers de 0 à tabCouleurs.length -1
+     * et codMot est incorrect ou incompatible avec les nbCoups
+     * premières lignes de cod et de rep
+     * action : affiche les erreurs d’incorrection ou d’incompatibilité
+     */
+    public static void afficheErreurs(String codMot, int[][] cod, int[][] rep, int nbCoups, int lgCode, char[] tabCouleurs) {
+
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vérification de votre code couleur...");
+        if(!codeCorrect(codMot, lgCode, tabCouleurs)){
+            System.out.println("Votre choix de code de base n'était donc pas bon.");
+        }
+
+        int[] codmot_entier = motVersEntiers(codMot, tabCouleurs);
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vérification de vos réponses...\n");
+        System.out.println("\n------------------------------\n");
+
+        for (int i = 0; i < nbCoups; i++) {
+
+            int[] nbBienMalPlaces = nbBienMalPlaces(cod[i], codmot_entier, tabCouleurs.length);
+            if (!sontEgaux(nbBienMalPlaces, rep[i])) {
+                System.out.println("Votre réponse " + i + " (" + rep[i][0] + "," + rep[i][1] + ") n'est pas vraie.");
+            }
+        }
+
+    }
+
     //___________________________________________________________________
 
     // manche Ordinateur
@@ -549,28 +588,41 @@ public class MasterMind_3_2 {
         System.out.println("\n------------------------------\n");
         System.out.println(entiersVersMot(sauvegardeCode[0], tabCouleurs));
         sauvegardeRep[0] = reponseHumain(lgCode);
-        if(sauvegardeRep[0][0]==lgCode){
+        if (sauvegardeRep[0][0] == lgCode) {
             System.out.println("!!! L'IA a trouvé le bon code !!!");
-            return  1;
+            return 1;
         }
 
         for (int i = 1; i <= nbEssaisMax; i++) {
             if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+
+                System.out.println("Vous vous êtes trompé dans vos saisies.");
+                System.out.println("\n------------------------------\n");
+                System.out.println("Veuillez rentrer votre code secret.");
+                String cod_a_trouver = devoile_reponse(lgCode, tabCouleurs);
+                System.out.println("\n------------------------------\n");
+                afficheErreurs(cod_a_trouver, sauvegardeCode, sauvegardeRep, i, lgCode, tabCouleurs);
+
                 return 0;
             }
             System.out.println("Voici le code proposé par l'ordinateur.");
             System.out.println("\n------------------------------\n");
             System.out.println(entiersVersMot(sauvegardeCode[i], tabCouleurs));
             sauvegardeRep[i] = reponseHumain(lgCode);
-            if(sauvegardeRep[i][0]==lgCode){
+            if (sauvegardeRep[i][0] == lgCode) {
                 System.out.println("!!! L'IA a trouvé le bon code !!!");
 
-                return  i;
+                return i;
             }
 
         }
+        System.out.println("Vous vous êtes trompé dans vos saisies.");
+        System.out.println("Veuillez rentrer votre code secret.");
+        String cod_a_trouver = devoile_reponse(lgCode, tabCouleurs);
+        System.out.println("\n------------------------------\n");
+        afficheErreurs(cod_a_trouver, sauvegardeCode, sauvegardeRep, nbEssaisMax, lgCode, tabCouleurs);
 
-        return sauvegardeRep[lgCode-1][1]+2*(lgCode-(sauvegardeRep[lgCode-1][1]+sauvegardeRep[lgCode-1][0]));
+        return sauvegardeRep[lgCode - 1][1] + 2 * (lgCode - (sauvegardeRep[lgCode - 1][1] + sauvegardeRep[lgCode - 1][0]));
 
     }
 
@@ -654,10 +706,10 @@ public class MasterMind_3_2 {
             couleurs[i] = demande.charAt(i);
         }
 
-        while (!elemDiff(couleurs) || !demande.equals(demande.toUpperCase())){
-            if(!elemDiff(couleurs)) {
+        while (!elemDiff(couleurs) || !demande.equals(demande.toUpperCase())) {
+            if (!elemDiff(couleurs)) {
                 System.out.println("Il y a eu des doublons, veuillez les supprimer.");
-            }else{
+            } else {
                 System.out.println("Les lettres ne sont pas en majuscule.");
             }
             System.out.println("Veuillez rentrer les initiales des couleurs.");
@@ -760,9 +812,9 @@ public class MasterMind_3_2 {
         System.out.println("C'est la fin de la partie. \nVotre score final est : " + score_joueur + ". \nLe score final de l'IA est : " + score_ordi + ".");
         System.out.println("\n------------------------------\n");
 
-        if(score_joueur<score_ordi){
+        if (score_joueur < score_ordi) {
             System.out.println("Vous avez gagné la parti !!! \nMerci d'avoir joué avec nous.");
-        }else{
+        } else {
             System.out.println("Vous avez perdu la parti ... \nMerci d'avoir joué avec nous.");
         }
 
