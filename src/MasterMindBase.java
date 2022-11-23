@@ -561,7 +561,7 @@ public class MasterMindBase {
 
         }
 
-        return sauvegardeRep[lgCode-1][1]+2*(lgCode-(sauvegardeRep[lgCode-1][1]+sauvegardeRep[lgCode-1][0]));
+        return sauvegardeRep[nbEssaisMax-1][1]+2*(lgCode-(sauvegardeRep[nbEssaisMax-1][1]+sauvegardeRep[nbEssaisMax-1][0]));
 
     }
 
