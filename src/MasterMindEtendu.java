@@ -552,11 +552,8 @@ public class MasterMindEtendu {
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
                 System.out.println("\n------------------------------\n");
                 System.out.println("Veuillez rentrer votre code secret.");
-                char[] cod_a_trouver = saisirCouleurs();
-                String mot_a_trouver = "";
-                for (int j = 0; j < cod_a_trouver.length; j++) {
-                    mot_a_trouver += cod_a_trouver[j];
-                }
+                Scanner myObj4 = new Scanner(System.in);
+                String mot_a_trouver = myObj4.nextLine();
                 System.out.println("\n------------------------------\n");
                 afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, i, lgCode, tabCouleurs);
 
@@ -577,11 +574,8 @@ public class MasterMindEtendu {
         System.out.println("Vous vous êtes trompé dans vos saisies.");
         System.out.println("\n------------------------------\n");
         System.out.println("Veuillez rentrer votre code secret.");
-        char[] cod_a_trouver = saisirCouleurs();
-        String mot_a_trouver = "";
-        for (int j = 0; j < cod_a_trouver.length; j++) {
-            mot_a_trouver += cod_a_trouver[j];
-        }
+        Scanner myObj4 = new Scanner(System.in);
+        String mot_a_trouver = myObj4.nextLine();
         System.out.println("\n------------------------------\n");
         afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, nbEssaisMax, lgCode, tabCouleurs);
 
