@@ -727,7 +727,7 @@ public class MasterMindEtendu {
     public static void affichePlateau(int [][] cod, int [][] rep, int nbCoups, char[] tabCouleurs) {
 
         // on affiche les côtés ordi caché lors de la partie
-        System.out.print("\n\n||");
+        System.out.print("\n\n     ||");
         for (int i = 0; i < cod[0].length; i++) {
             if (i==cod[0].length-1)System.out.print("///");
             else System.out.print("////");
@@ -735,28 +735,28 @@ public class MasterMindEtendu {
         System.out.print("||\n");
 
 
-        System.out.print("||");
+        System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
             if (i==cod[0].length-1) System.out.print("   ");
             else System.out.print("    ");
         }
         System.out.print("||\n");
 
-        System.out.print("||");
+        System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
             System.out.print(" ? |");
 
         }
         System.out.print("|");
 
-        System.out.print("\n||");
+        System.out.print("\n     ||");
         for (int k = 0; k < cod[0].length; k++) {
             if (k==cod[0].length-1) System.out.print("---");
             else System.out.print("----");
         }
         System.out.print("||\n");
 
-        System.out.print("||");
+        System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
             if (i==cod[0].length-1) System.out.print("   ");
             else System.out.print("    ");
@@ -765,13 +765,16 @@ public class MasterMindEtendu {
 
 
         for (int i = 0; i <cod.length; i++) {
+            System.out.print("["+rep[i][0]+"]  ");
             System.out.print("||");
             for (int j = 0; j < cod[0].length; j++) {
                 if (i<nbCoups)System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
                 else System.out.print("   |");
             }
             System.out.print("|");
-            System.out.print("\n||");
+            System.out.print("  ["+rep[i][1]+"]");
+
+            System.out.print("\n     ||");
             for (int k = 0; k < cod[0].length; k++) {
                 if (k==cod[0].length-1) System.out.print("---");
                 else System.out.print("----");
@@ -780,7 +783,7 @@ public class MasterMindEtendu {
         }
 
 
-        System.out.print("||");
+        System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
             if (i==cod[0].length-1) System.out.print("///");
             else System.out.print("////");
