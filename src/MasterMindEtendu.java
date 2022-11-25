@@ -343,22 +343,22 @@ public class MasterMindEtendu {
         System.out.println("\n------------------------------\n");
         System.out.println("Vous êtes à la manche " + numManche + ".");
         int[] cod1 = codeAleat(lgCode, tabCouleurs.length);
-        int[][] sauvegardeCode= new int[nbEssaisMax][lgCode];
+        int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
         int[][] sauvegardeRep = new int[nbEssaisMax][2];
         for (int i = 1; i <= nbEssaisMax; i++) {
             System.out.println("\n------------------------------\n");
-            System.out.println("Vous pouvez choisir entre ses couleurs : "+listElem(tabCouleurs));
-            sauvegardeCode[i-1] = propositionCodeHumain(i, lgCode, tabCouleurs);
-            if (nbBienMalPlaces(cod1, sauvegardeCode[i-1], tabCouleurs.length)[0] == lgCode) {
+            System.out.println("Vous pouvez choisir entre ses couleurs : " + listElem(tabCouleurs));
+            sauvegardeCode[i - 1] = propositionCodeHumain(i, lgCode, tabCouleurs);
+            if (nbBienMalPlaces(cod1, sauvegardeCode[i - 1], tabCouleurs.length)[0] == lgCode) {
                 System.out.println("\n------------------------------\n");
                 System.out.println("!!! vous avez trouvé le code !!!");
                 System.out.println("\n------------------------------\n");
 
                 return i;
             } else {
-                sauvegardeRep[i-1] = nbBienMalPlaces(cod1, sauvegardeCode[i-1], tabCouleurs.length);
+                sauvegardeRep[i - 1] = nbBienMalPlaces(cod1, sauvegardeCode[i - 1], tabCouleurs.length);
 
-                affichePlateau(sauvegardeCode,sauvegardeRep,i,tabCouleurs);
+                affichePlateau(sauvegardeCode, sauvegardeRep, i, tabCouleurs);
 
             }
         }
@@ -371,7 +371,7 @@ public class MasterMindEtendu {
         System.out.println(listElem(couleurs_a_trouver));
         System.out.println("\n------------------------------\n");
 
-        return sauvegardeRep[nbEssaisMax-1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax-1][0] + sauvegardeRep[nbEssaisMax-1][1]));
+        return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][0] + sauvegardeRep[nbEssaisMax - 1][1]));
     }
 
     //____________________________________________________________
@@ -539,14 +539,14 @@ public class MasterMindEtendu {
         sauvegardeCode[0] = initTab(lgCode, 0);
         System.out.println("Voici le code proposé par l'ordinateur.");
         System.out.println("\n------------------------------\n");
-        affichePlateau(sauvegardeCode,sauvegardeRep,1,tabCouleurs);
+        affichePlateau(sauvegardeCode, sauvegardeRep, 1, tabCouleurs);
         sauvegardeRep[0] = reponseHumain(lgCode);
         if (sauvegardeRep[0][0] == lgCode) {
             System.out.println("!!! L'IA a trouvé le bon code !!!");
             return 1;
         }
 
-        for (int i = 1; i <= nbEssaisMax; i++) {
+        for (int i = 1; i < nbEssaisMax; i++) {
             if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
 
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
@@ -561,12 +561,12 @@ public class MasterMindEtendu {
             }
             System.out.println("Voici le code proposé par l'ordinateur.");
             System.out.println("\n------------------------------\n");
-            affichePlateau(sauvegardeCode,sauvegardeRep,i,tabCouleurs);
+            affichePlateau(sauvegardeCode, sauvegardeRep, i + 1, tabCouleurs);
             sauvegardeRep[i] = reponseHumain(lgCode);
             if (sauvegardeRep[i][0] == lgCode) {
                 System.out.println("!!! L'IA a trouvé le bon code !!!");
 
-                return i;
+                return i + 1;
             }
 
         }
@@ -702,7 +702,7 @@ public class MasterMindEtendu {
 
         System.out.println("\n------------------------------\n");
         System.out.println("Vérification de votre code couleur...");
-        if(!codeCorrect(codMot, lgCode, tabCouleurs)){
+        if (!codeCorrect(codMot, lgCode, tabCouleurs)) {
             System.out.println("Votre choix de code de base n'était donc pas bon.");
         }
 
@@ -724,12 +724,12 @@ public class MasterMindEtendu {
     // Affichage du tableau
 
 
-    public static void affichePlateau(int [][] cod, int [][] rep, int nbCoups, char[] tabCouleurs) {
+    public static void affichePlateau(int[][] cod, int[][] rep, int nbCoups, char[] tabCouleurs) {
 
         // on affiche les côtés ordi caché lors de la partie
         System.out.print("\n\n     ||");
         for (int i = 0; i < cod[0].length; i++) {
-            if (i==cod[0].length-1)System.out.print("///");
+            if (i == cod[0].length - 1) System.out.print("///");
             else System.out.print("////");
         }
         System.out.print("||\n");
@@ -737,46 +737,46 @@ public class MasterMindEtendu {
 
         System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
-            if (i==cod[0].length-1) System.out.print("   ");
+            if (i == cod[0].length - 1) System.out.print("   ");
             else System.out.print("    ");
         }
         System.out.print("||\n");
 
-        System.out.print("     ||");
+        System.out.print(" BP  ||");
         for (int i = 0; i < cod[0].length; i++) {
             System.out.print(" ? |");
 
         }
-        System.out.print("|");
+        System.out.print("|  MP");
 
         System.out.print("\n     ||");
         for (int k = 0; k < cod[0].length; k++) {
-            if (k==cod[0].length-1) System.out.print("---");
+            if (k == cod[0].length - 1) System.out.print("---");
             else System.out.print("----");
         }
         System.out.print("||\n");
 
         System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
-            if (i==cod[0].length-1) System.out.print("   ");
+            if (i == cod[0].length - 1) System.out.print("   ");
             else System.out.print("    ");
         }
         System.out.print("||\n");
 
 
-        for (int i = 0; i <cod.length; i++) {
-            System.out.print("["+rep[i][0]+"]  ");
+        for (int i = 0; i < cod.length; i++) {
+            System.out.print("[" + rep[i][0] + "]  ");
             System.out.print("||");
             for (int j = 0; j < cod[0].length; j++) {
-                if (i<nbCoups)System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
+                if (i < nbCoups) System.out.print(" " + tabCouleurs[cod[i][j]] + " |");
                 else System.out.print("   |");
             }
             System.out.print("|");
-            System.out.print("  ["+rep[i][1]+"]");
+            System.out.print("  [" + rep[i][1] + "]");
 
             System.out.print("\n     ||");
             for (int k = 0; k < cod[0].length; k++) {
-                if (k==cod[0].length-1) System.out.print("---");
+                if (k == cod[0].length - 1) System.out.print("---");
                 else System.out.print("----");
             }
             System.out.print("||\n");
@@ -785,7 +785,7 @@ public class MasterMindEtendu {
 
         System.out.print("     ||");
         for (int i = 0; i < cod[0].length; i++) {
-            if (i==cod[0].length-1) System.out.print("///");
+            if (i == cod[0].length - 1) System.out.print("///");
             else System.out.print("////");
         }
         System.out.print("||\n");
@@ -879,12 +879,13 @@ public class MasterMindEtendu {
 
         if (score_joueur < score_ordi) {
             System.out.println("Vous avez gagné la parti !!! \nMerci d'avoir joué avec nous.");
+        } else if (score_joueur==score_ordi) {
+            System.out.println("vous avez fait égalité !!! \nMerci d'avoir joué avec nous.");
         } else {
             System.out.println("Vous avez perdu la parti ... \nMerci d'avoir joué avec nous.");
         }
 
     } // fin main
-
 
 
 }
