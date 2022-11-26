@@ -556,7 +556,7 @@ public class MasterMindBase {
         }
 
         for (int i = 1; i <= nbEssaisMax; i++) {
-            if (!passePropSuivante(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+            if (!passeCodeSuivantLexicoCompat(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
                 return 0;
             }
             System.out.println("Voici le code proposé par l'ordinateur.");
