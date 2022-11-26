@@ -448,11 +448,12 @@ public class MasterMindBase {
 
     //___________________________________________________________________
 
-    /**
-     * pré-requis : les éléments de cod1 sont des entiers de 0 à nbCouleurs-1
-     * action : met dans cod1 le code qui le suit selon l'ordre lexicographique dans l'ensemble
-     * des codes de longueur cod1.length à valeurs de 0 à nbCouleurs-1, si ce code existe
-     * résultat : vrai ssi l'action a pu être effectuée
+    /**CHANGE : action si le code suivant n'existe pas
+     *************************************************
+     pré-requis : les éléments de cod1 sont des entiers de 0 à nbCouleurs-1
+     action/résultat : met dans cod1 le code qui le suit selon l'ordre lexicographique (dans l'ensemble
+     des codes à valeurs  de 0 à nbCouleurs-1) et retourne vrai si ce code existe,
+     sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
     public static boolean passeCodeSuivantLexico(int[] cod1, int nbCouleurs) {
 
@@ -463,26 +464,34 @@ public class MasterMindBase {
             } else if (cod1[i] == nbCouleurs - 1) {
                 cod1[i] = 0;
             } else {
+                for (int j = 0; j < cod1.length; j++) {
+                    cod1[j]=0;
+                }
                 return false;
             }
+        }
+        for (int j = 0; j < cod1.length; j++) {
+            cod1[j]=0;
         }
         return false;
     }
 
     //___________________________________________________________________
 
-    /**
-     * pré-requis : cod est une matrice, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length
-     * et  nbCoups < rep.length
-     * résultat : vrai ssi cod[nbCoups] est compatible avec les nbCoups premières lignes de cod et de rep,
-     * c'est-à-dire que si cod[nbCoups] était le code secret, les réponses aux nbCoups premières
-     * propositions de cod seraient les nbCoups premières réponses de rep
+    /**CHANGE : ajout du paramètre cod1 et modification des spécifications
+     *********************************************************************
+     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     résultat : vrai ssi cod1 est compatible avec les nbCoups premières lignes de cod et de rep,
+     c'est-à-dire que si cod1 était le code secret, les réponses aux nbCoups premières
+     propositions de cod seraient les nbCoups premières réponses de rep resp.
      */
-    public static boolean estCompat(int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
+
+    public static boolean estCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
 
         for (int i = 0; i < nbCoups; i++) {
 
-            int[] nbBienMalPlaces = nbBienMalPlaces(cod[i], cod[nbCoups], nbCouleurs);
+            int[] nbBienMalPlaces = nbBienMalPlaces(cod[i], cod1, nbCouleurs);
             if (!sontEgaux(nbBienMalPlaces, rep[i])) {
                 return false;
             }
@@ -493,20 +502,21 @@ public class MasterMindBase {
 
     //___________________________________________________________________
 
-    /**
-     * pré-requis : cod est une matrice, rep est une matrice à 2 colonnes, 0 < nbCoups < cod.length
-     * et nbCoups < rep.length
-     * action : met dans cod[nbCoups] le plus petit code (selon l'ordre lexicographique dans l'ensemble
-     * des codes de longueur cod[0].length à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
-     * cod[nbCoups-1] selon cet ordre et compatible avec les nbCoups premières lignes de cod et de rep,
-     * si ce code existe
-     * résultat : vrai ssi l'action a pu être effectuée
+    /**CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
+     ajout du paramètre cod1 et modification des spécifications
+     **************************************************************************
+     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     action/résultat : met dans cod1 le plus petit code (selon l'ordre lexicographique (dans l'ensemble
+     des codes à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
+     cod1 selon cet ordre et compatible avec les nbCoups premières lignes de cod et rep si ce code existe,
+     sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
-    public static boolean passePropSuivante(int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
+    public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
         cod[nbCoups] = copieTab(cod[nbCoups - 1]);
 
         while (passeCodeSuivantLexico(cod[nbCoups], nbCouleurs)) {
-            if (estCompat(cod, rep, nbCoups, nbCouleurs)) {
+            if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
                 return true;
             }
         }
