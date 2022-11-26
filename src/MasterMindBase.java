@@ -321,11 +321,6 @@ public class MasterMindBase {
     }
 
 
-    // Affichage du tableau
-
-
-
-
 
     //____________________________________________________________
 
