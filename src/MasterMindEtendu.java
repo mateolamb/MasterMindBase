@@ -450,12 +450,13 @@ public class MasterMindEtendu {
 
     //___________________________________________________________________
 
-    /**CHANGE : action si le code suivant n'existe pas
-     *************************************************
-     pré-requis : les éléments de cod1 sont des entiers de 0 à nbCouleurs-1
-     action/résultat : met dans cod1 le code qui le suit selon l'ordre lexicographique (dans l'ensemble
-     des codes à valeurs  de 0 à nbCouleurs-1) et retourne vrai si ce code existe,
-     sinon met dans cod1 le code ne contenant que des "0" et retourne faux
+    /**
+     * CHANGE : action si le code suivant n'existe pas
+     * ************************************************
+     * pré-requis : les éléments de cod1 sont des entiers de 0 à nbCouleurs-1
+     * action/résultat : met dans cod1 le code qui le suit selon l'ordre lexicographique (dans l'ensemble
+     * des codes à valeurs  de 0 à nbCouleurs-1) et retourne vrai si ce code existe,
+     * sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
     public static boolean passeCodeSuivantLexico(int[] cod1, int nbCouleurs) {
 
@@ -467,29 +468,30 @@ public class MasterMindEtendu {
                 cod1[i] = 0;
             } else {
                 for (int j = 0; j < cod1.length; j++) {
-                    cod1[j]=0;
+                    cod1[j] = 0;
                 }
                 return false;
             }
         }
         for (int j = 0; j < cod1.length; j++) {
-            cod1[j]=0;
+            cod1[j] = 0;
         }
         return false;
     }
 
     //___________________________________________________________________
 
-    /**CHANGE : ajout du paramètre cod1 et modification des spécifications
-     *********************************************************************
-     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
-     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
-     résultat : vrai ssi cod1 est compatible avec les nbCoups premières lignes de cod et de rep,
-     c'est-à-dire que si cod1 était le code secret, les réponses aux nbCoups premières
-     propositions de cod seraient les nbCoups premières réponses de rep resp.
+    /**
+     * CHANGE : ajout du paramètre cod1 et modification des spécifications
+     * ********************************************************************
+     * pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     * nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     * résultat : vrai ssi cod1 est compatible avec les nbCoups premières lignes de cod et de rep,
+     * c'est-à-dire que si cod1 était le code secret, les réponses aux nbCoups premières
+     * propositions de cod seraient les nbCoups premières réponses de rep resp.
      */
 
-    public static boolean estCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
+    public static boolean estCompat(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
 
         for (int i = 0; i < nbCoups; i++) {
 
@@ -504,17 +506,18 @@ public class MasterMindEtendu {
 
     //___________________________________________________________________
 
-    /**CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
-     ajout du paramètre cod1 et modification des spécifications
-     **************************************************************************
-     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
-     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
-     action/résultat : met dans cod1 le plus petit code (selon l'ordre lexicographique (dans l'ensemble
-     des codes à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
-     cod1 selon cet ordre et compatible avec les nbCoups premières lignes de cod et rep si ce code existe,
-     sinon met dans cod1 le code ne contenant que des "0" et retourne faux
+    /**
+     * CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
+     * ajout du paramètre cod1 et modification des spécifications
+     * *************************************************************************
+     * pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     * nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     * action/résultat : met dans cod1 le plus petit code (selon l'ordre lexicographique (dans l'ensemble
+     * des codes à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
+     * cod1 selon cet ordre et compatible avec les nbCoups premières lignes de cod et rep si ce code existe,
+     * sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
-    public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
+    public static boolean passeCodeSuivantLexicoCompat(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
 
         while (passeCodeSuivantLexico(cod1, nbCouleurs)) {
             if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
@@ -557,8 +560,8 @@ public class MasterMindEtendu {
         }
 
         for (int i = 1; i < nbEssaisMax; i++) {
-            int[] cod1 = copieTab(sauvegardeCode[i-1]);
-            if (!passeCodeSuivantLexicoCompat(cod1,sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+            int[] cod1 = copieTab(sauvegardeCode[i - 1]);
+            if (!passeCodeSuivantLexicoCompat(cod1, sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
 
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
                 System.out.println("\n------------------------------\n");
@@ -804,24 +807,90 @@ public class MasterMindEtendu {
     }
 
 
-
-
-    public void statsMasterMindIA(int lgcode,  char[] tabCouleurs){
+    public static void statsMasterMindIA(int lgcode, char[] tabCouleurs) {
         int[] tous_les_code = initTab(lgcode, 0);
-        int[] cod_final = initTab(lgcode, (tabCouleurs.length -1));
+        int[][] codes_maximums = new int[1][lgcode];
+        codes_maximums[0] = tous_les_code;
+        int[] cod_final = initTab(lgcode, (tabCouleurs.length - 1));
+        int moyenne = 0;
+        int compteur = 0;
+        int maximum = 0;
 
-        while(!sontEgaux(tous_les_code, cod_final)){
 
+        for (int j = 0; j < (Math.pow(tabCouleurs.length, lgcode)); j++) {
+
+            int code_trouve = test_code(tous_les_code, lgcode, tabCouleurs);
+            System.out.println(code_trouve + " - " + entiersVersMot(tous_les_code, tabCouleurs));
+            moyenne += code_trouve;
+
+            if (code_trouve > maximum) {
+                codes_maximums = new int[1][lgcode];
+                codes_maximums[0] = copieTab(tous_les_code);
+                maximum = code_trouve;
+            } else if (code_trouve == maximum) {
+                int[][] copie_codes_maximums = new int[codes_maximums.length][lgcode];
+                for (int i = 0; i < codes_maximums.length; i++) {
+                    copie_codes_maximums[i] = copieTab(codes_maximums[i]);
+                }
+                codes_maximums = new int[codes_maximums.length + 1][lgcode];
+
+                for (int i = 0; i < copie_codes_maximums.length; i++) {
+                    codes_maximums[i] = copieTab(copie_codes_maximums[i]);
+                }
+
+                codes_maximums[copie_codes_maximums.length] = tous_les_code;
+
+            }
 
             passeCodeSuivantLexico(tous_les_code, tabCouleurs.length);
+
+            compteur++;
         }
 
+        System.out.println("Le code sera trouvé en moyenne au bout de " + moyenne / compteur + " essaies.");
+        System.out.println("Les codes qui seront le plus efficaces (trouvés en " + maximum + " coups) sont : ");
+        for (int i = 0; i < codes_maximums.length; i++) {
+            System.out.println(entiersVersMot(codes_maximums[i], tabCouleurs));
+        }
+        System.out.println("\n------------------------------\n");
+
     }
 
 
-    public int test_code(int lgcode, char[] tabCouleurs){
+    public static int test_code(int[] cod_a_trouver, int lgCode, char[] tabCouleurs) {
+
+        int[][] sauvegardeCode = new int[(int) Math.pow(tabCouleurs.length, lgCode)][lgCode];
+        int[][] sauvegardeRep = new int[(int) Math.pow(tabCouleurs.length, lgCode)][2];
+        sauvegardeCode[0] = initTab(lgCode, 0);
+        sauvegardeRep[0] = nbBienMalPlaces(sauvegardeCode[0], cod_a_trouver, tabCouleurs.length);
+
+        if (sauvegardeRep[0][0] == lgCode) {
+            return 1;
+        }
+
+        for (int i = 1; i < (Math.pow(tabCouleurs.length, lgCode)); i++) {
+
+            int[] cod1 = copieTab(sauvegardeCode[i - 1]);
+
+            passeCodeSuivantLexicoCompat(cod1, sauvegardeCode, sauvegardeRep, i, tabCouleurs.length);
+
+
+            sauvegardeCode[i] = cod1;
+
+            sauvegardeRep[i] = nbBienMalPlaces(sauvegardeCode[i], cod_a_trouver, tabCouleurs.length);
+            if (sauvegardeRep[i][0] == lgCode) {
+                return i + 1;
+            }
+
+        }
+
+
+        return 0;
+
 
     }
+
+    ;
 
 
     //.........................................................................
@@ -829,18 +898,19 @@ public class MasterMindEtendu {
     //.........................................................................
 
 
-
-    /**CHANGE : ajout de : le nombre d'essais maximum doit être strictement positif
-     ******************************************************************************
-     action : demande à l'utilisateur de saisir les paramètres de la partie (lgCode, tabCouleurs,
-     nbManches, nbEssaisMax),
-     effectue la partie et affiche le résultat (identité du gagnant ou match nul).
-     La longueur d'un code, le nombre de couleurs et le nombre d'essais maximum doivent être strictement positifs.
-     Le nombre de manches doit être un nombre pair strictement positif.
-     Les initiales des noms de couleurs doivent être différentes.
-     Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
+    /**
+     * CHANGE : ajout de : le nombre d'essais maximum doit être strictement positif
+     * *****************************************************************************
+     * action : demande à l'utilisateur de saisir les paramètres de la partie (lgCode, tabCouleurs,
+     * nbManches, nbEssaisMax),
+     * effectue la partie et affiche le résultat (identité du gagnant ou match nul).
+     * La longueur d'un code, le nombre de couleurs et le nombre d'essais maximum doivent être strictement positifs.
+     * Le nombre de manches doit être un nombre pair strictement positif.
+     * Les initiales des noms de couleurs doivent être différentes.
+     * Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
     public static void main(String[] args) {
+
 
         System.out.println("\n\n\n /$$      /$$                       /$$                               /$$      /$$ /$$                 /$$");
         System.out.println("| $$$    /$$$                      | $$                              | $$$    /$$$|__/                | $$");
@@ -869,6 +939,11 @@ public class MasterMindEtendu {
 
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
+
+        statsMasterMindIA(lgCode, tabCouleurs);
+
+
+        int nbEssaisMax2 = saisirEntierPositif();
 
 
         int score_joueur = 0;
@@ -913,7 +988,7 @@ public class MasterMindEtendu {
 
         if (score_joueur < score_ordi) {
             System.out.println("Vous avez gagné la parti !!! \nMerci d'avoir joué avec nous.");
-        } else if (score_joueur==score_ordi) {
+        } else if (score_joueur == score_ordi) {
             System.out.println("vous avez fait égalité !!! \nMerci d'avoir joué avec nous.");
         } else {
             System.out.println("Vous avez perdu la parti ... \nMerci d'avoir joué avec nous.");
