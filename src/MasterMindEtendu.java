@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -514,9 +515,8 @@ public class MasterMindEtendu {
      sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
     public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
-        cod[nbCoups] = copieTab(cod[nbCoups - 1]);
 
-        while (passeCodeSuivantLexico(cod[nbCoups], nbCouleurs)) {
+        while (passeCodeSuivantLexico(cod1, nbCouleurs)) {
             if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
                 return true;
             }
@@ -557,7 +557,8 @@ public class MasterMindEtendu {
         }
 
         for (int i = 1; i < nbEssaisMax; i++) {
-            if (!passeCodeSuivantLexicoCompat(sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+            int[] cod1 = copieTab(sauvegardeCode[i-1]);
+            if (!passeCodeSuivantLexicoCompat(cod1,sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
 
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
                 System.out.println("\n------------------------------\n");
@@ -569,6 +570,7 @@ public class MasterMindEtendu {
 
                 return 0;
             }
+            sauvegardeCode[i] = cod1;
             System.out.println("Voici le code proposé par l'ordinateur.");
             System.out.println("\n------------------------------\n");
             affichePlateau(sauvegardeCode, sauvegardeRep, i + 1, tabCouleurs);
@@ -799,6 +801,26 @@ public class MasterMindEtendu {
             else System.out.print("////");
         }
         System.out.print("||\n");
+    }
+
+
+
+
+    public void statsMasterMindIA(int lgcode,  char[] tabCouleurs){
+        int[] tous_les_code = initTab(lgcode, 0);
+        int[] cod_final = initTab(lgcode, (tabCouleurs.length -1));
+
+        while(!sontEgaux(tous_les_code, cod_final)){
+
+
+            passeCodeSuivantLexico(tous_les_code, tabCouleurs.length);
+        }
+
+    }
+
+
+    public int test_code(int lgcode, char[] tabCouleurs){
+
     }
 
 
