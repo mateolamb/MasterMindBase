@@ -808,10 +808,10 @@ public class MasterMindEtendu {
 
 
     public static void statsMasterMindIA(int lgcode, char[] tabCouleurs) {
+
         int[] tous_les_code = initTab(lgcode, 0);
         int[][] codes_maximums = new int[1][lgcode];
         codes_maximums[0] = tous_les_code;
-        int[] cod_final = initTab(lgcode, (tabCouleurs.length - 1));
         int moyenne = 0;
         int compteur = 0;
         int maximum = 0;
@@ -820,7 +820,6 @@ public class MasterMindEtendu {
         for (int j = 0; j < (Math.pow(tabCouleurs.length, lgcode)); j++) {
 
             int code_trouve = test_code(tous_les_code, lgcode, tabCouleurs);
-            System.out.println(code_trouve + " - " + entiersVersMot(tous_les_code, tabCouleurs));
             moyenne += code_trouve;
 
             if (code_trouve > maximum) {
@@ -838,12 +837,10 @@ public class MasterMindEtendu {
                     codes_maximums[i] = copieTab(copie_codes_maximums[i]);
                 }
 
-                codes_maximums[copie_codes_maximums.length] = tous_les_code;
+                codes_maximums[copie_codes_maximums.length] = copieTab(tous_les_code);
 
             }
-
             passeCodeSuivantLexico(tous_les_code, tabCouleurs.length);
-
             compteur++;
         }
 
