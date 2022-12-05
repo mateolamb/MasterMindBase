@@ -731,8 +731,8 @@ public class MasterMindBase {
                 System.out.println("\n------------------------------\n");
                 int M_h = mancheHumain(lgCode, tabCouleurs, i, nbEssaisMax);
 
-                score_joueur += M_h;
-                System.out.println("Votre score est : " + score_joueur);
+                score_ordi += M_h;
+                System.out.println("Le score de l'IA est : " + score_ordi);
                 System.out.println("\n------------------------------\n");
 
 
@@ -743,8 +743,8 @@ public class MasterMindBase {
                 int M_o = mancheOrdinateur(lgCode, tabCouleurs, i, nbEssaisMax);
 
                 if (M_o != 0) {
-                    score_ordi += M_o;
-                    System.out.println("Le score de l'IA est : " + score_ordi);
+                    score_joueur += M_o;
+                    System.out.println("LVotre score est : " + score_joueur);
                     System.out.println("\n------------------------------\n");
                 } else {
                     System.out.println("Vous vous êtes trompé dans vos saisies. Passons à la manche suivante.");
