@@ -887,12 +887,139 @@ public class MasterMindEtendu {
 
     }
 
+    // CFC
+
+    public static boolean passPropSuivanteC(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
+        int nbBienMalPlaces = rep[nbCoups - 1][0] + rep[nbCoups - 1][1];
+        for (int i = nbBienMalPlaces; i < cod1.length; i++) {
+            if (cod1[i] == nbCouleurs - 1) {
+                return false;
+            }
+            cod1[i]++;
+        }
+        return true;
+    }
+
+    public static void passePropSuivanteFC(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs, int iFont, int iCurseur, int[] codeCouleur, int position) {
+        for (int i = 0; i < cod1.length; i++) {
+            cod1[i] = codeCouleur[iFont];
+        }
+        cod1[position] = codeCouleur[iCurseur];
+    }
+
+    public static int mancheOrdinateurCFC(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vous êtes à la manche " + numManche + ".");
+        int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
+        int[][] sauvegardeRep = new int[nbEssaisMax][2];
+
+
+        sauvegardeCode[0] = initTab(lgCode, 0);
+        System.out.println("Voici le code proposé par l'ordinateur.");
+        System.out.println("\n------------------------------\n");
+        affichePlateau(sauvegardeCode, sauvegardeRep, 1, tabCouleurs);
+        sauvegardeRep[0] = reponseHumain(lgCode);
+        if (sauvegardeRep[0][0] == lgCode) {
+            System.out.println("!!! L'IA a trouvé le bon code !!!");
+            return 1;
+        }
+
+        for (int nbCoupC = 1; nbCoupC < nbEssaisMax; nbCoupC++) {
+            int[] cod1 = copieTab(sauvegardeCode[nbCoupC - 1]);
+            if (!passPropSuivanteC(cod1, sauvegardeCode, sauvegardeRep, nbCoupC, tabCouleurs.length)) {
+
+                System.out.println("Vous vous êtes trompé dans vos saisies.");
+                System.out.println("\n------------------------------\n");
+                System.out.println("Veuillez rentrer votre code secret.");
+                Scanner myObj4 = new Scanner(System.in);
+                String mot_a_trouver = myObj4.nextLine();
+                System.out.println("\n------------------------------\n");
+                afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, nbCoupC, lgCode, tabCouleurs);
+
+                return 0;
+            }
+            sauvegardeCode[nbCoupC] = cod1;
+
+            System.out.println("Voici le code proposé par l'ordinateur.");
+            System.out.println("\n------------------------------\n");
+            affichePlateau(sauvegardeCode, sauvegardeRep, nbCoupC + 1, tabCouleurs);
+            sauvegardeRep[nbCoupC] = reponseHumain(lgCode);
+            if (sauvegardeRep[nbCoupC][0] == lgCode) {
+                System.out.println("!!! L'IA a trouvé le bon code !!!");
+
+                return nbCoupC + 1;
+            }
+
+            if (sauvegardeRep[nbCoupC][0] + sauvegardeRep[nbCoupC][1] == lgCode) {
+
+                int[] codeCouleur = copieTab(sauvegardeCode[nbCoupC]);
+                int[] codeCouleurFrequence = tabFrequence(codeCouleur, tabCouleurs.length);
+                int iCurseur = lgCode - 1;
+                int iFont = 0;
+                int position = 0;
+                int[] codeBon = initTab(lgCode, -1);
+
+                for (int nbCoupFC = nbCoupC + 1; nbCoupFC < nbEssaisMax; nbCoupFC++) {
+                    if (iCurseur == iFont) {
+                        for (int i = 0; i < lgCode; i++) {
+                            if (codeBon[i] == -1) {
+                                codeBon[i] = codeCouleur[iFont];
+                            }
+                        }
+
+                        sauvegardeCode[nbCoupFC] = copieTab(codeBon);
+                    }
+                    else {
+                        cod1 = copieTab(sauvegardeCode[nbCoupFC - 1]);
+                        passePropSuivanteFC(cod1, sauvegardeCode, sauvegardeRep, nbCoupFC, tabCouleurs.length, iFont, iCurseur, codeCouleur, position);
+                        sauvegardeCode[nbCoupFC] = copieTab(cod1);
+                    }
+
+
+                    System.out.println("Voici le code proposé par l'ordinateur.");
+                    System.out.println("\n------------------------------\n");
+                    affichePlateau(sauvegardeCode, sauvegardeRep, nbCoupFC + 1, tabCouleurs);
+                    sauvegardeRep[nbCoupFC] = reponseHumain(lgCode);
+
+                    if (sauvegardeRep[nbCoupFC][0] == lgCode) {
+                        System.out.println("!!! L'IA a trouvé le bon code !!!");
+                        return nbCoupFC + 1;
+                    }
+
+                    if (sauvegardeRep[nbCoupFC][0] == codeCouleurFrequence[iFont] + 1) {
+                        codeBon[position] = codeCouleur[iCurseur];
+                        iCurseur--;
+                    } else if (sauvegardeRep[nbCoupFC][1] >= 2) {
+                        codeBon[position] = codeCouleur[iFont];
+                        iFont++;
+                    }
+
+
+                    position++;
+                }
+            }
+
+        }
+
+        System.out.println("Vous vous êtes trompé dans vos saisies.");
+        System.out.println("\n------------------------------\n");
+        System.out.println("Veuillez rentrer votre code secret.");
+        Scanner myObj4 = new Scanner(System.in);
+        String mot_a_trouver = myObj4.nextLine();
+        System.out.println("\n------------------------------\n");
+
+        afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, nbEssaisMax, lgCode, tabCouleurs);
+
+        return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][1] + sauvegardeRep[nbEssaisMax - 1][0]));
+
+    }
+
     ;
 
 
-    //.........................................................................
-    // PROGRAMME PRINCIPAL
-    //.........................................................................
+//.........................................................................
+// PROGRAMME PRINCIPAL
+//.........................................................................
 
 
     /**
@@ -936,6 +1063,8 @@ public class MasterMindEtendu {
 
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
+
+        mancheOrdinateurCFC(lgCode, tabCouleurs, 1, nbEssaisMax);
 
         statsMasterMindIA(lgCode, tabCouleurs);
 
