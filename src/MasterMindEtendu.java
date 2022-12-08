@@ -940,9 +940,6 @@ public class MasterMindEtendu {
         statsMasterMindIA(lgCode, tabCouleurs);
 
 
-        int nbEssaisMax2 = saisirEntierPositif();
-
-
         int score_joueur = 0;
         int score_ordi = 0;
 
