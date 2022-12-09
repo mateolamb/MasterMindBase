@@ -885,7 +885,7 @@ public class MasterMindEtendu {
 
     // CFC
 
-    public static boolean passPropSuivanteC(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
+    public static boolean passPropSuivanteC(int[] cod1, int[][] rep, int nbCoups, int nbCouleurs) {
         int nbBienMalPlaces = rep[nbCoups - 1][0] + rep[nbCoups - 1][1];
         for (int i = nbBienMalPlaces; i < cod1.length; i++) {
             if (cod1[i] == nbCouleurs - 1) {
@@ -896,7 +896,7 @@ public class MasterMindEtendu {
         return true;
     }
 
-    public static void passePropSuivanteFC(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs, int iFont, int iCurseur, int[] codeCouleur, int position) {
+    public static void passePropSuivanteFC(int[] cod1, int nbCoups, int nbCouleurs, int iFont, int iCurseur, int[] codeCouleur, int position) {
         for (int i = 0; i < cod1.length; i++) {
             cod1[i] = codeCouleur[iFont];
         }
@@ -922,7 +922,7 @@ public class MasterMindEtendu {
 
         for (int nbCoupC = 1; nbCoupC < nbEssaisMax; nbCoupC++) {
             int[] cod1 = copieTab(sauvegardeCode[nbCoupC - 1]);
-            if (!passPropSuivanteC(cod1, sauvegardeCode, sauvegardeRep, nbCoupC, tabCouleurs.length)) {
+            if (!passPropSuivanteC(cod1, sauvegardeRep, nbCoupC, tabCouleurs.length)) {
 
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
                 System.out.println("\n------------------------------\n");
@@ -967,7 +967,7 @@ public class MasterMindEtendu {
                     }
                     else {
                         cod1 = copieTab(sauvegardeCode[nbCoupFC - 1]);
-                        passePropSuivanteFC(cod1, sauvegardeCode, sauvegardeRep, nbCoupFC, tabCouleurs.length, iFont, iCurseur, codeCouleur, position);
+                        passePropSuivanteFC(cod1, nbCoupFC, tabCouleurs.length, iFont, iCurseur, codeCouleur, position);
                         sauvegardeCode[nbCoupFC] = copieTab(cod1);
                     }
 
@@ -985,13 +985,22 @@ public class MasterMindEtendu {
                     if (sauvegardeRep[nbCoupFC][0] == codeCouleurFrequence[iFont] + 1) {
                         codeBon[position] = codeCouleur[iCurseur];
                         iCurseur--;
+                        if(codeCouleur[iCurseur]==codeCouleur[iFont]){
+                            iCurseur--;
+                        }
                     } else if (sauvegardeRep[nbCoupFC][1] >= 2) {
                         codeBon[position] = codeCouleur[iFont];
                         iFont++;
+                        if(codeCouleur[iCurseur]==codeCouleur[iFont]){
+                            iFont++;
+                        }
                     }
 
-
                     position++;
+                    if(position==lgCode-1){
+                        position=0;
+                    }
+
                 }
             }
 
@@ -1060,7 +1069,6 @@ public class MasterMindEtendu {
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
 
-        mancheOrdinateurCFC(lgCode, tabCouleurs, 1, nbEssaisMax);
 
         statsMasterMindIA(lgCode, tabCouleurs);
 
