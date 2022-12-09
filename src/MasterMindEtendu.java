@@ -375,6 +375,7 @@ public class MasterMindEtendu {
         return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][0] + sauvegardeRep[nbEssaisMax - 1][1]));
     }
 
+
     //____________________________________________________________
 
     //...................................................................
@@ -479,6 +480,27 @@ public class MasterMindEtendu {
         return false;
     }
 
+    public static boolean passeCodePrecedantLexico(int[] cod1, int nbCouleurs) {
+
+        for (int i = cod1.length - 1; i >= 0; i--) {
+            if (cod1[i] > 0) {
+                cod1[i]--;
+                return true;
+            } else if (cod1[i] == 0) {
+                cod1[i] = nbCouleurs - 1;
+            } else {
+                for (int j = 0; j < cod1.length; j++) {
+                    cod1[j] = 0;
+                }
+                return false;
+            }
+        }
+        for (int j = 0; j < cod1.length; j++) {
+            cod1[j] = 0;
+        }
+        return false;
+    }
+
     //___________________________________________________________________
 
     /**
@@ -525,7 +547,6 @@ public class MasterMindEtendu {
             }
         }
         return false;
-
     }
 
     //___________________________________________________________________
@@ -562,6 +583,63 @@ public class MasterMindEtendu {
         for (int i = 1; i < nbEssaisMax; i++) {
             int[] cod1 = copieTab(sauvegardeCode[i - 1]);
             if (!passeCodeSuivantLexicoCompat(cod1, sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
+
+                System.out.println("Vous vous êtes trompé dans vos saisies.");
+                System.out.println("\n------------------------------\n");
+                System.out.println("Veuillez rentrer votre code secret.");
+                Scanner myObj4 = new Scanner(System.in);
+                String mot_a_trouver = myObj4.nextLine();
+                System.out.println("\n------------------------------\n");
+                afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, i, lgCode, tabCouleurs);
+
+                return 0;
+            }
+            sauvegardeCode[i] = cod1;
+            System.out.println("Voici le code proposé par l'ordinateur.");
+            System.out.println("\n------------------------------\n");
+            affichePlateau(sauvegardeCode, sauvegardeRep, i + 1, tabCouleurs);
+            sauvegardeRep[i] = reponseHumain(lgCode);
+            if (sauvegardeRep[i][0] == lgCode) {
+                System.out.println("!!! L'IA a trouvé le bon code !!!");
+
+                return i + 1;
+            }
+
+        }
+
+        System.out.println("Vous vous êtes trompé dans vos saisies.");
+        System.out.println("\n------------------------------\n");
+        System.out.println("Veuillez rentrer votre code secret.");
+        Scanner myObj4 = new Scanner(System.in);
+        String mot_a_trouver = myObj4.nextLine();
+        System.out.println("\n------------------------------\n");
+        afficheErreurs(mot_a_trouver, sauvegardeCode, sauvegardeRep, nbEssaisMax, lgCode, tabCouleurs);
+
+        return sauvegardeRep[nbEssaisMax - 1][1] + 2 * (lgCode - (sauvegardeRep[nbEssaisMax - 1][1] + sauvegardeRep[nbEssaisMax - 1][0]));
+
+    }
+
+
+    public static int mancheOrdinateur_ContreStrategie(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax) {
+        System.out.println("\n------------------------------\n");
+        System.out.println("Vous êtes à la manche " + numManche + ".");
+        int[][] sauvegardeCode = new int[nbEssaisMax][lgCode];
+        int[][] sauvegardeRep = new int[nbEssaisMax][2];
+
+
+        sauvegardeCode[0] = codeAleat(lgCode, tabCouleurs.length - 1);
+        System.out.println("Voici le code proposé par l'ordinateur.");
+        System.out.println("\n------------------------------\n");
+        affichePlateau(sauvegardeCode, sauvegardeRep, 1, tabCouleurs);
+        sauvegardeRep[0] = reponseHumain(lgCode);
+        if (sauvegardeRep[0][0] == lgCode) {
+            System.out.println("!!! L'IA a trouvé le bon code !!!");
+            return 1;
+        }
+
+        for (int i = 1; i < nbEssaisMax; i++) {
+            int[] cod1 = copieTab(sauvegardeCode[i - 1]);
+            if (!passeCodeSuivantLexicoCompatContreStrategie(cod1, sauvegardeCode, sauvegardeRep, i, tabCouleurs.length)) {
 
                 System.out.println("Vous vous êtes trompé dans vos saisies.");
                 System.out.println("\n------------------------------\n");
@@ -844,6 +922,7 @@ public class MasterMindEtendu {
             compteur++;
         }
 
+        System.out.println("Voici quelques stratégies sur la partie : ");
         System.out.println("Le code sera trouvé en moyenne au bout de " + moyenne / compteur + " essaies.");
         System.out.println("Les codes qui seront le plus efficaces (trouvés en " + maximum + " coups) sont : ");
         for (int i = 0; i < codes_maximums.length; i++) {
@@ -871,7 +950,6 @@ public class MasterMindEtendu {
 
             passeCodeSuivantLexicoCompat(cod1, sauvegardeCode, sauvegardeRep, i, tabCouleurs.length);
 
-
             sauvegardeCode[i] = cod1;
 
             sauvegardeRep[i] = nbBienMalPlaces(sauvegardeCode[i], cod_a_trouver, tabCouleurs.length);
@@ -884,10 +962,46 @@ public class MasterMindEtendu {
 
         return 0;
 
-
     }
 
-    ;
+
+    public static boolean passeCodeSuivantLexicoCompatContreStrategie(int[] cod1, int[][] cod, int[][] rep, int nbCoups, int nbCouleurs) {
+
+        int[] sauve_code1 = copieTab(cod1);
+
+        Random rn = new Random();
+        int alea = rn.nextInt(2);
+
+        if (alea == 0) {
+            while (passeCodeSuivantLexico(cod1, nbCouleurs)) {
+                if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
+                    return true;
+                }
+            }
+            cod1 = sauve_code1;
+            while (passeCodePrecedantLexico(cod1, nbCouleurs)) {
+                if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            while (passeCodePrecedantLexico(cod1, nbCouleurs)) {
+                if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
+                    return true;
+                }
+            }
+            cod1 = sauve_code1;
+            while (passeCodeSuivantLexico(cod1, nbCouleurs)) {
+                if (estCompat(cod1, cod, rep, nbCoups, nbCouleurs)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+    }
 
 
     //.........................................................................
@@ -937,7 +1051,22 @@ public class MasterMindEtendu {
         // on demande tabCouleurs
         char[] tabCouleurs = saisirCouleurs();
 
+        System.out.println("Veuillez Patientez, nous établissons des stratégies...");
+
         statsMasterMindIA(lgCode, tabCouleurs);
+
+        System.out.println("\n------------------------------\n");
+        System.out.println("Pressez entrer pour continuer");
+
+        Scanner entrer = new Scanner(System.in);
+        String scanner = entrer.nextLine();
+
+        System.out.println("Contre quelle stratégie de l'IA voulez-vous jouer ?\n1 - La basique\n2 - CFC\n3 - Contre stratégie ");
+        int choix = saisirEntierPositif();
+        while (choix > 3) {
+            System.out.println("Veuillez choisir un nombre entre 1 et 3 (compris)");
+            choix = saisirEntierPositif();
+        }
 
 
         int score_joueur = 0;
@@ -953,7 +1082,7 @@ public class MasterMindEtendu {
                 System.out.println("\n------------------------------\n");
                 int M_h = mancheHumain(lgCode, tabCouleurs, i, nbEssaisMax);
 
-                score_ordi += M_h;
+                score_ordi += 0;
                 System.out.println("Le score de l'IA est : " + score_ordi);
                 System.out.println("\n------------------------------\n");
 
@@ -962,7 +1091,16 @@ public class MasterMindEtendu {
 
                 System.out.println("C'est au tour de notre IA d'être le codeur.");
                 System.out.println("\n------------------------------\n");
-                int M_o = mancheOrdinateur(lgCode, tabCouleurs, i, nbEssaisMax);
+
+                int M_o = 0;
+
+                if (choix == 1) {
+                    M_o = mancheOrdinateur(lgCode, tabCouleurs, i, nbEssaisMax);
+                } else if (choix == 2) {
+                    M_o = mancheOrdinateur(lgCode, tabCouleurs, i, nbEssaisMax);
+                } else {
+                    M_o = mancheOrdinateur_ContreStrategie(lgCode, tabCouleurs, i, nbEssaisMax);
+                }
 
                 if (M_o != 0) {
                     score_joueur += M_o;
