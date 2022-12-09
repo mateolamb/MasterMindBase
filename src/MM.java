@@ -761,6 +761,8 @@ public class MM {
 
         if (score_joueur < score_ordi) {
             System.out.println("Vous avez gagné la parti !!! \nMerci d'avoir joué avec nous.");
+        } else if (score_joueur == score_ordi) {
+            System.out.println("vous avez fait égalité!!! \nMerci d'avoir joué avec nous.");
         } else {
             System.out.println("Vous avez perdu la parti ... \nMerci d'avoir joué avec nous.");
         }
