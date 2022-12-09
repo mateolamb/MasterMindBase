@@ -1,4 +1,4 @@
-import java.util.Arrays;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -279,8 +279,8 @@ public class MasterMindEtendu {
         int[] freq = new int[nbCouleurs];
 
         // pour chaque valeur de cod, on prend cette valeur qui correspond donc à l'indice du tableau freq et on ajoute 1
-        for (int i = 0; i < cod.length; i++) {
-            freq[cod[i]]++;
+        for (int j : cod) {
+            freq[j]++;
         }
         return freq;
     }
@@ -297,11 +297,7 @@ public class MasterMindEtendu {
         int[] freqCod2 = tabFrequence(cod2, nbCouleurs);
         int nbCommuns = 0;
         for (int i = 0; i < nbCouleurs; i++) {
-            if (freqCod1[i] < freqCod2[i]) {
-                nbCommuns += freqCod1[i];
-            } else {
-                nbCommuns += freqCod2[i];
-            }
+            nbCommuns += Math.min(freqCod1[i], freqCod2[i]);
         }
         return nbCommuns - nbBienPlaces(cod1, cod2);
     }
@@ -387,8 +383,8 @@ public class MasterMindEtendu {
      */
     public static String entiersVersMot(int[] cod, char[] tabCouleurs) {
         String codMot = "";
-        for (int i = 0; i < cod.length; i++) {
-            codMot += tabCouleurs[cod[i]];
+        for (int j : cod) {
+            codMot += tabCouleurs[j];
         }
         return codMot;
     }
@@ -846,8 +842,8 @@ public class MasterMindEtendu {
 
         System.out.println("Le code sera trouvé en moyenne au bout de " + moyenne / compteur + " essaies.");
         System.out.println("Les codes qui seront le plus efficaces (trouvés en " + maximum + " coups) sont : ");
-        for (int i = 0; i < codes_maximums.length; i++) {
-            System.out.println(entiersVersMot(codes_maximums[i], tabCouleurs));
+        for (int[] codes_maximum : codes_maximums) {
+            System.out.println(entiersVersMot(codes_maximum, tabCouleurs));
         }
         System.out.println("\n------------------------------\n");
 
@@ -1014,7 +1010,7 @@ public class MasterMindEtendu {
 
     }
 
-    ;
+
 
 
 //.........................................................................
