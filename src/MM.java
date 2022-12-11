@@ -302,7 +302,7 @@ public class MM {
                 nbCommuns += freqCod2[i];
             }
         }
-        return nbCommuns - nbBienPlaces(cod1, cod2);
+        return nbCommuns;
     }
 
     //____________________________________________________________
@@ -317,7 +317,7 @@ public class MM {
     public static int[] nbBienMalPlaces(int[] cod1, int[] cod2, int nbCouleurs) {
         int nbBienPlaces = nbBienPlaces(cod1, cod2);
         int nbCommuns = nbCommuns(cod1, cod2, nbCouleurs);
-        return new int[]{nbBienPlaces, nbCommuns};
+        return new int[]{nbBienPlaces, nbCommuns-nbBienPlaces};
     }
 
 

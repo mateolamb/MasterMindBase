@@ -1034,7 +1034,7 @@ public class MasterMindEtendu {
      * nbManches, nbEssaisMax),
      * effectue la partie et affiche le résultat (identité du gagnant ou match nul).
      * La longueur d'un code, le nombre de couleurs et le nombre d'essais maximum doivent être strictement positifs.
-     * Le nombre de manches doit être un nombre pair strictement positif.
+     * Le nombre de manches doit être un nombre pair strictement positif.**
      * Les initiales des noms de couleurs doivent être différentes.
      * Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
